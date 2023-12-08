@@ -1,23 +1,43 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
 
-class Usuarios(models.Model):
-    estudiante_matricula = models.CharField(max_length=10, unique=True)
-    profesor_matricula = models.CharField(max_length=10, unique=True)
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
-    email = models.EmailField(blank=True)
-    avatar = models.ImageField(upload_to='avatar', null=True, blank=True) # se van a guardar en una carpeta llamada 'media' configurada en los 'settings'
+# class Usuarios(models.Model):
+#     estudiante_matricula = models.CharField(max_length=10, unique=True)
+#     profesor_matricula = models.CharField(max_length=10, unique=True)
+#     nombre = models.CharField(max_length=50)
+#     apellido = models.CharField(max_length=50)
+#     email = models.EmailField(blank=True)
+#     avatar = models.ImageField(upload_to='avatar', null=True, blank=True) # se van a guardar en una carpeta llamada 'media' configurada en los 'settings'
+
+#     def __str__(self):
+#         return self.nombre
+    
+#     class Meta:
+#         verbose_name = 'Usuario'
+#         verbose_name_plural = 'Usuarios'
+#         db_table = 'usuario'
+#         ordering = ['id']
+
+class User(AbstractUser):
+    # nombre = models.CharField(max_length=50)
+    # apellido = models.CharField(max_length=50)
+    # email = models.EmailField(blank=True)
+    avatar = models.ImageField(upload_to='avatar', null=True, blank=True) 
 
     def __str__(self):
-        return self.nombre
-    
-    class Meta:
-        verbose_name = 'Usuario'
-        verbose_name_plural = 'Usuarios'
-        db_table = 'usuario'
-        ordering = ['id']
+        return self.username
+
+class Estudiante(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    matricula = models.CharField(max_length=10, unique=True)
+    # Otros campos específicos para estudiantes si es necesario
+
+class Profesor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    matricula = models.CharField(max_length=10, unique=True)
+    # Otros campos específicos para profesores si es necesario
 
 class Ticket(models.Model):
     asunto = models.CharField(max_length=200)
@@ -36,9 +56,9 @@ class Ticket(models.Model):
     # sacar en una tabla log
     # fecha_actualizacion = models.DateTimeField(auto_now=True)
 
-    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='tickets_creados')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets_creados')
     email = models.EmailField(blank=True)
-    asignado_a = models.ForeignKey(Usuarios, on_delete=models.SET_NULL, null=True, blank=True, related_name='tickets_asignados')
+    asignado_a = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tickets_asignados')
 
     #  índice para acelerar las consultas frecuentes que buscan tickets por su estado o prioridad:
     # estado = models.ForeignKey(Estado, on_delete=models.CASCADE, related_name='tickets', null=True)
@@ -55,7 +75,7 @@ class Ticket(models.Model):
 class Comentario(models.Model):
     FK_id_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comentarios')
     fecha_creado = models.DateTimeField(auto_now_add=True)
-    usuario = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comentario = models.TextField()
 
     def __str__(self):
@@ -68,8 +88,8 @@ class Estado(models.Model):
         ('Cerrado', 'cerrado'),
     )
     FK_id_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='estados')
-    usuario_creacion = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='estados_creados')
-    usuario_modificacion = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='estados_modificados')
+    usuario_creacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='estados_creados')
+    usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='estados_modificados')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Abierto')
     fecha_modificacion = models.DateTimeField(auto_now=True)
     # comentario = models.TextField(blank=True)
@@ -84,8 +104,8 @@ class Prioridad(models.Model):
         ('Alta', 'alta'),
     )
     FK_id_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='prioridades')
-    usuario_creacion = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='prioridades_creadas')
-    usuario_modificacion = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='prioridades_modificadas')
+    usuario_creacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prioridades_creadas')
+    usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prioridades_modificadas')
     prioridad = models.CharField(max_length=20, choices=PRIORIDAD_CHOICES, default='Normal')
     fecha_modificacion = models.DateTimeField(auto_now=True)
     # comentario = models.TextField(blank=True)

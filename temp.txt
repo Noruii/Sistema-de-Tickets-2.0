@@ -9,3 +9,6 @@ video 8 https://www.youtube.com/watch?v=_6Rjhyz-FH8&list=PLxm9hnvxnn-j5ZDOgQS63U
 en este video se crea los modelos de la base de datos por primera vez
 OJO - Se istalo la libreria pillow para trabajar conimagenes
 ------
+
+	ACTUALIZAR REQUERIMIENTOS:
+ pip freeze > requirements.txt 
