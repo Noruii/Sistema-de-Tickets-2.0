@@ -1,15 +1,36 @@
-{% extends "body.html" %} 
+{% extends "body.html" %}
+
+{% load static %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/Responsive-2.5.0/css/responsive.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/SearchPanes-2.2.0/css/searchPanes.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/Select-1.7.0/css/select.dataTables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/css/buttons.dataTables.min.css' %}"/>
+
+    <script src="{% static '/lib/DataTables-1.13.8/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/plugins/Responsive-2.5.0/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/plugins/Responsive-2.5.0/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/plugins/SearchPanes-2.2.0/js/dataTables.searchPanes.min.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/plugins/Select-1.7.0/js/dataTables.select.min.js' %}"></script>
+    <script src="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/js/dataTables.buttons.min.js' %}"></script>
+
+    
+{% endblock head %}
+
 {% block list %}
-    <div class="card card-default">
+    <div class="card card-default card-primary">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fa-solid fa-users"></i>
-                {{ title }} 
+                <i class="fa-solid fa-users"></i> {{ title }} 
             </h3>
         </div>
     
         <div class="card-body">
-            <table class="table">
+            <table class="table" id="data">
                 <thead>
                     {% block columnas %}
                     
@@ -20,6 +41,11 @@
                     
                     {% endblock filas %}
                 </tbody>
+                <tfoot>
+                    {% block footer %}
+                        
+                    {% endblock footer %}
+                </tfoot>
             </table>
         </div>
         <div class="card-footer">
@@ -29,3 +55,46 @@
         </div>
     </div>
 {% endblock list %}
+
+{% block javascript %}
+    <script>
+        $(function () {
+            $('#data').DataTable({
+                //responsive: true,
+                responsive: {
+                    details: {
+                        display: DataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return 'Detalles para ' + data[1];
+                            }
+                        }),
+                        renderer: DataTable.Responsive.renderer.tableAll({
+                            tableClass: 'table'
+                        })
+                    }
+                },
+            
+                searchPanes: {
+                    initCollapsed: true,
+                    cascadePanes: true,
+                    layout: 'columns-4'
+                },
+                dom: 'Plfrtip',
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [1, 2, 3, 4]
+                    }
+                ],
+            
+                // autowidth: false,
+                "language": {
+                    url : "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                },
+            });
+        });
+    </script>
+{% endblock javascript %}
