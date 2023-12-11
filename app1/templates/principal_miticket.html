@@ -9,29 +9,63 @@
             Home
         </h3>
     </div>
-
+    <style>
+        .custom-box {
+            border: 1px solid white;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            background-color: aliceblue;
+            /* Centra el contenido */
+        }
+    
+        .btn-box {
+            text-decoration: none;
+            /* Elimina el subrayado del enlace */
+        }
+    </style>
     <div class="card-body">
-        <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
-            Danger alert preview. This alert is dismissable. A wonderful serenity has taken possession of my
-            entire
-            soul, like these sweet mornings of spring which I enjoy with my whole heart.
-        </div>
-        <div class="alert alert-info alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-info"></i> Alert!</h5>
-            Info alert preview. This alert is dismissable.
-        </div>
-        <div class="alert alert-warning alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
-            Warning alert preview. This alert is dismissable.
-        </div>
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h5><i class="icon fas fa-check"></i> Alert!</h5>
-            Success alert preview. This alert is dismissable.
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#" class="btn-box">
+                        <div class="custom-box">
+                            <i class="fas fa-5x fa-ticket mb-3"></i>
+                            <h4>Crear un ticket</h4>
+                            <p>Acceder a la creación de tickets</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" class="btn-box">
+                        <div class="custom-box">
+                            <i class="fas fa-5x fa-user-edit mb-3"></i>
+                            <h4>Consultar tickets</h4>
+                            <p>Ver tickets creados, solicitudes actuales y respuestas</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#" class="btn-box">
+                        <div class="custom-box">
+                            <i class="fas fa-5x fa-file-lines mb-3"></i>
+                            <h4>Generar Reportes</h4>
+                            <p>Acceder al panel de reportes</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" class="btn-box">
+                        <div class="custom-box">
+                            <i class="fas fa-5x fa-users mb-3"></i>
+                            <h4>Gestion Usuarios</h4>
+                            <p>Acceder al panel de gestionar da necesarios</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
