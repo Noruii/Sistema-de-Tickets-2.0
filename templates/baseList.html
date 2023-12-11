@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/Select-1.7.0/css/select.dataTables.min.css' %}"/>
     <link rel="stylesheet" href="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/css/buttons.dataTables.min.css' %}"/>
 
+    <link rel="stylesheet" href="{% static '/lib/daterangepicker/daterangepicker.css' %}"/>
+
     <script src="{% static '/lib/DataTables-1.13.8/js/jquery.dataTables.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/Responsive-2.5.0/js/dataTables.responsive.min.js' %}"></script>
@@ -18,13 +20,15 @@
     <script src="{% static '/lib/DataTables-1.13.8/plugins/SearchPanes-2.2.0/js/dataTables.searchPanes.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/Select-1.7.0/js/dataTables.select.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/js/dataTables.buttons.min.js' %}"></script>
-
     <script src="{% static '/lib/DataTables-1.13.8/plugins/JSZip-3.10.1/jszip.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/pdfmake-0.2.7/pdfmake.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/pdfmake-0.2.7/vfs_fonts.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/js/buttons.html5.min.js' %}"></script>
     <script src="{% static '/lib/DataTables-1.13.8/plugins/Buttons-2.4.2/js/buttons.print.min.js' %}"></script>
     
+    <script src="{% static '/lib/daterangepicker/moment.min.js' %}"></script>
+    <script src="{% static '/lib/daterangepicker/daterangepicker.js' %}"></script>
+
 {% endblock head %}
 
 {% block list %}
@@ -62,20 +66,6 @@
                     icon: "success"
                 });
             </script>
-            <!-- {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        {{ message }}
-                        <script>
-                            Swal.fire({
-                                title: "Good job!",
-                                text: "You clicked the button!",
-                                icon: "success"
-                            });
-                        </script>
-                    {% endfor %}
-                </ul>
-            {% endif %} -->
             <button class="btn btn-primary">
                 <i class="fa-solid fa-plus"></i> Nuevo Usuario
             </button>

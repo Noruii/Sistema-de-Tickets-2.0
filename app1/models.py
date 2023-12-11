@@ -24,20 +24,11 @@ class User(AbstractUser):
     # nombre = models.CharField(max_length=50)
     # apellido = models.CharField(max_length=50)
     # email = models.EmailField(blank=True)
+    matricula = models.CharField(max_length=10, unique=True)
     avatar = models.ImageField(upload_to='avatar', null=True, blank=True) 
 
     def __str__(self):
         return self.username
-
-class Estudiante(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    matricula = models.CharField(max_length=10, unique=True)
-    # Otros campos específicos para estudiantes si es necesario
-
-class Profesor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    matricula = models.CharField(max_length=10, unique=True)
-    # Otros campos específicos para profesores si es necesario
 
 class Ticket(models.Model):
     asunto = models.CharField(max_length=200)
