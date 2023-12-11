@@ -7,6 +7,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Correo</th>
+        <th scope="col">fecha login</th>
         <th scope="col">Opciones</th>
     </tr>
 {% endblock columnas %}
@@ -21,6 +22,7 @@
             <td>{{ u.first_name }}</td>
             <td>{{ u.last_name }}</td>
             <td>{{ u.email }}</td>
+            <td>{{ u.date_joined }}</td>
             <td>
                 <button type="button" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
@@ -36,6 +38,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Correo</th>
+        <th scope="col">fecha login</th>
         <th scope="col">Opciones</th>
     </tr>
 {% endblock footer %}
