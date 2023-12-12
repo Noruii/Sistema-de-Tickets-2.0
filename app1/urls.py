@@ -7,7 +7,18 @@ urlpatterns = [
     # path('dos/', views.testview2, name='view2'),
 
     path('iniciar_sesion/', iniciar_sesion, name='iniciar_sesion'),
+    path('cerrar_sesion/', cerrar_sesion, name='cerrar_sesion'),
     path('principal_miticket/', principal_miticket_view, name='principal_miticket'),
+
+    # Vistas de Django de recuperar contraseña
+
+    # Consultar tickets
+
+    # Vista de general reportes
+
+    # Crear usuarios / consultar usuarios
+
+    # -----
 
     # arreglar esta es para los reportes
     path('usuarios/list/', usuarios_list, name='usuarios_list'),

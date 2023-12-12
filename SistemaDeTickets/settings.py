@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Apps
-    'app1'
+    'app1',
+    'user'
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,10 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'app1.User'
+# Path were media is stored
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# Base url to serve media files
+MEDIA_URL = '/media/'
+
+# Custom user model
+AUTH_USER_MODEL = 'user.User'

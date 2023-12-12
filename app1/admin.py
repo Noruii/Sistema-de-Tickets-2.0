@@ -7,7 +7,6 @@ from .models import *
 #     readonly_fields = ("fecha_creacion",)
 
 # Register your models here.
-admin.site.register(User)
 admin.site.register(Ticket)
 admin.site.register(Comentario)
 admin.site.register(Estado)

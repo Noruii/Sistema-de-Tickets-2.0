@@ -1,5 +1,7 @@
 {% extends "body.html" %}
 
+{% load static %}
+
 {% block list %}
 
 <div class="card card-default card-primary">
@@ -18,7 +20,7 @@
             background-color: aliceblue;
             /* Centra el contenido */
         }
-    
+
         .btn-box {
             text-decoration: none;
             /* Elimina el subrayado del enlace */
@@ -46,26 +48,28 @@
                     </a>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <a href="#" class="btn-box">
-                        <div class="custom-box">
-                            <i class="fas fa-5x fa-file-lines mb-3"></i>
-                            <h4>Generar Reportes</h4>
-                            <p>Acceder al panel de reportes</p>
-                        </div>
-                    </a>
+            {% if user.is_superuser or user.is_staff %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="#" class="btn-box">
+                            <div class="custom-box">
+                                <i class="fas fa-5x fa-file-lines mb-3"></i>
+                                <h4>Generar Reportes</h4>
+                                <p>Acceder al panel de reportes</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="#" class="btn-box">
+                            <div class="custom-box">
+                                <i class="fas fa-5x fa-users mb-3"></i>
+                                <h4>Gestion de Usuarios</h4>
+                                <p>Acceder al panel de gestionar da necesarios</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <a href="#" class="btn-box">
-                        <div class="custom-box">
-                            <i class="fas fa-5x fa-users mb-3"></i>
-                            <h4>Gestion Usuarios</h4>
-                            <p>Acceder al panel de gestionar da necesarios</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 </div>

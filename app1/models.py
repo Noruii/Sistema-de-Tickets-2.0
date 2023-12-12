@@ -1,35 +1,7 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from user.models import User
 
 # Create your models here.
-
-# class Usuarios(models.Model):
-#     estudiante_matricula = models.CharField(max_length=10, unique=True)
-#     profesor_matricula = models.CharField(max_length=10, unique=True)
-#     nombre = models.CharField(max_length=50)
-#     apellido = models.CharField(max_length=50)
-#     email = models.EmailField(blank=True)
-#     avatar = models.ImageField(upload_to='avatar', null=True, blank=True) # se van a guardar en una carpeta llamada 'media' configurada en los 'settings'
-
-#     def __str__(self):
-#         return self.nombre
-    
-#     class Meta:
-#         verbose_name = 'Usuario'
-#         verbose_name_plural = 'Usuarios'
-#         db_table = 'usuario'
-#         ordering = ['id']
-
-class User(AbstractUser):
-    # nombre = models.CharField(max_length=50)
-    # apellido = models.CharField(max_length=50)
-    # email = models.EmailField(blank=True)
-    matricula = models.CharField(max_length=10, unique=True)
-    avatar = models.ImageField(upload_to='avatar', null=True, blank=True) 
-
-    def __str__(self):
-        return self.username
-
 class Ticket(models.Model):
     asunto = models.CharField(max_length=200)
     descripcion = models.TextField()
@@ -43,9 +15,6 @@ class Ticket(models.Model):
     )
     departamento = models.CharField(max_length=50, choices=DEPARTAMENTO_CHOICES, default='Otro')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
-    # sacar en una tabla log
-    # fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets_creados')
     email = models.EmailField(blank=True)
@@ -83,7 +52,6 @@ class Estado(models.Model):
     usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='estados_modificados')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Abierto')
     fecha_modificacion = models.DateTimeField(auto_now=True)
-    # comentario = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.id} - Ticket#: {self.FK_id_ticket.id} - Estado: {self.estado} - Clasificado por: {self.usuario_creacion.username}"
@@ -99,7 +67,6 @@ class Prioridad(models.Model):
     usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prioridades_modificadas')
     prioridad = models.CharField(max_length=20, choices=PRIORIDAD_CHOICES, default='Normal')
     fecha_modificacion = models.DateTimeField(auto_now=True)
-    # comentario = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.id} - Ticket#: {self.FK_id_ticket.id} - Prioridad: {self.prioridad} - Clasificado por: {self.usuario_creacion.username}"

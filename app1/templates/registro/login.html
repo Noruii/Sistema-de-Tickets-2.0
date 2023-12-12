@@ -3,7 +3,7 @@
 {% include "head" %}
 
 {% block body %}
-<body class="login-page" style="min-height: 464px;">
+<div class="login-page" style="min-height: 464px;">
     <div class="login-box">
 
         <div class="card card-outline card-primary">
@@ -12,9 +12,27 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Iniciar Sesión</p>
-                <form action="#" method="post">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+
+                    <!-- Mensajes sweetalert2 -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <script>
+                                    Swal.fire({
+                                        "title":"¡Error!",
+                                        "text":"{{ message }}",
+                                        "icon":"error"
+                                    })
+                                </script>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="ID banner">
+                        <input type="text" name="matricula" class="form-control" placeholder="ID banner">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fa-solid fa-user"></span>
@@ -22,7 +40,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Contraseña">
+                        <input type="password"name="password" class="form-control" placeholder="Contraseña">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -45,6 +63,7 @@
 
                     </div>
                 </form>
+
                 <div class="mt-2 mb-3">
                     <p>Para acceder a la plataforma debes utilizar el mismo usuario y contraseña que utilizas para ingresar a autoservicio.</p>
                     <p>Los docentes deben de utilizar la letra P delante de su código. Ejemplo: P990000</p>
@@ -61,6 +80,6 @@
         </div>
 
     </div>
-    </body>
+</div>
 {% endblock body %}
 

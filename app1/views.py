@@ -1,15 +1,16 @@
 from typing import Any
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.generic import ListView
-
 from django.contrib import messages
 
 from app1.models import *
 
 # Create your views here.
 
-# Vistas basada en funcion
+# Vistas basadas en funcion
 def usuarios_list(request):
     data = {
         'title': 'Listado de usuarios',
@@ -18,29 +19,33 @@ def usuarios_list(request):
     return render(request, 'usuarios/list.html', data)
 
 def iniciar_sesion(request):
-    return render(request, 'registro/login.html')
-    # if request.method == 'GET':
-    #     return render(request, 'loginticket.html')
-    # else:
-    #     user = authenticate(request, 
-    #         username=request.POST['user_nombre'],
-    #         password=request.POST['user_clave1']
-    #     )
-    #     # Comprobando si el usuario es normal o admin 
-    #     # TODO: arreglar...
-    #     if user is None:
-    #         messages.error(request, 'El usuario o la contraseña son incorrectos.')
-    #         return redirect('iniciar_sesion') 
-    #     else:
-    #         login(request, user)
-    #         if request.user.is_superuser or request.user.is_staff:
-    #             return redirect('principal_miticket')
-    #         else:
-    #             return redirect('principal_miticket') 
+    if request.method == 'POST':
+        p = request.POST
+        print(p)
+        matricula = request.POST.get('matricula')
+        password = request.POST.get('password')
+        user = authenticate(request, matricula=matricula, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('principal_miticket')
 
-#@login_required
+        messages.error(request, 'La matrícula o la contraseña son incorrectas.')
+    
+    return render(request, 'registro/login.html') 
+
+@login_required
+def cerrar_sesion(request):
+    logout(request)
+    return redirect('iniciar_sesion')
+
+@login_required
 def principal_miticket_view(request):
     return render(request, 'principal_miticket.html')
+
+
+
+
 
 # buena explicacion https://youtu.be/iP4LxWbbpy8?si=A5hF7fx466GCTfD3
 # ListView | Vistas basadas en clases (manda 'object_list' a la plantilla html revisar doc django)
