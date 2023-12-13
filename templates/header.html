@@ -4,10 +4,17 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Home</a>
+            <a href="{% url 'principal_miticket' %}" class="nav-link">Home</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+        {% if user.is_superuser or user.is_staff %}
+            <li class="nav-item">
+                <div class="nav-link">
+                    <p>Administrador</p>
+                </div>
+            </li>
+        {% endif %}
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="fas fa-users-cog"></i>
@@ -17,13 +24,13 @@
                         Último Acceso: {{ user.last_login }}
                     </span>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
+                <a href="{% url 'perfil_de_usuario' id=user.id %}" class="dropdown-item">
                     <i class="fas fa-edit mr-2"></i> Editar perfil
                     <span class="float-right text-muted text-sm">3 mins</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a href="#" class="dropdown-item">
-                    <i class="fas fa-lock mr-2"></i> Editar password
+                    <i class="fas fa-lock mr-2"></i> Editar contraseña
                     <span class="float-right text-muted text-sm">12 hours</span>
                 </a>
                 <div class="dropdown-divider"></div>

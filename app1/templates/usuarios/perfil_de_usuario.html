@@ -1,0 +1,42 @@
+{% extends 'body.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="card card-default card-primary">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa-solid fa-user"></i>
+                Editar perfil
+            </h3>
+        </div>
+        
+        <div class="d-flex align-items-center justify-content-center mt-3">
+            <div class="card card-secundary card-outline">
+                <div class="card-body box-profile">
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle" src="{{ request.user.get_image }}"
+                            alt="User profile picture">
+                    </div>
+                    <h3 class="profile-username text-center">Se unió:</h3>
+                    <p class="text-muted text-center">{{ request.user.date_joined }}</p>
+                    <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                            <b>Matrícula</b> <a class="float-right ml-5">{{ request.user.matricula }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Nombre</b> <a class="float-right ml-5">{{ request.user.first_name }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Apellidos</b> <a class="float-right ml-5">{{ request.user.last_name }}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Correo electrónico</b> <a class="float-right ml-5">{{ request.user.email }}</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-primary btn-block"><b>Editar perfil</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
