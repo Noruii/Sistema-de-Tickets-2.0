@@ -1,7 +1,5 @@
 {% extends "home.html" %}
 
-{% include "head" %}
-
 {% block body %}
 <div class="login-page" style="min-height: 464px;">
     <div class="login-box">
@@ -32,7 +30,7 @@
                     {% endif %}
 
                     <div class="input-group mb-3">
-                        <input type="text" name="matricula" class="form-control" placeholder="ID banner">
+                        <input type="text" name="matricula" class="form-control" placeholder="ID banner" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fa-solid fa-user"></span>
@@ -40,7 +38,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password"name="password" class="form-control" placeholder="Contraseña">
+                        <input type="password"name="password" class="form-control" placeholder="Contraseña" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>

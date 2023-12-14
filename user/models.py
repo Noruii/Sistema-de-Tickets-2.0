@@ -10,6 +10,7 @@ from pathlib import Path
 # Create your models here.
 from django.contrib.auth.models import BaseUserManager
 
+# Para sobreescribir el create superuser de django
 class CustomUserManager(BaseUserManager):
     def create_user(self, matricula, password=None, **extra_fields):
         if not matricula:
@@ -36,12 +37,13 @@ class User(AbstractUser):
         max_length=10, 
         unique=True
     )
-    avatar = models.ImageField(upload_to='avatar', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatar/%Y/%m/%d', null=True, blank=True)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'matricula'
 
+    # Imagen de default para el usuario
     def get_default_image_path():
         default_image_path = None
         static_dirs = settings.STATICFILES_DIRS

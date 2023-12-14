@@ -28,15 +28,86 @@
                             <b>Nombre</b> <a class="float-right ml-5">{{ request.user.first_name }}</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Apellidos</b> <a class="float-right ml-5">{{ request.user.last_name }}</a>
+                            <b>Apellido</b> <a class="float-right ml-5">{{ request.user.last_name }}</a>
                         </li>
                         <li class="list-group-item">
                             <b>Correo electrónico</b> <a class="float-right ml-5">{{ request.user.email }}</a>
                         </li>
                     </ul>
-                    <a href="#" class="btn btn-primary btn-block"><b>Editar perfil</b></a>
+                    <!-- Botón para abrir el modal -->
+                    <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editarPerfilModal"><b>Editar perfil</b></a>
                 </div>
             </div>
         </div>
+        
+        <!-- Modal editar perfil -->
+        <div class="modal fade" id="editarPerfilModal" tabindex="-1" aria-labelledby="editarPerfilModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editarPerfilModalLabel">
+                            <i class="fa-solid fa-user" style="color: #007bff;"></i>
+                            Editar perfil
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                        </button>
+                    </div>
+                    <!-- Campos de formulario (enctype para las imagenes) -->
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="first_name" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="first_name" id="first_name" value="{{ request.user.first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name" class="form-label">Apellido</label>
+                                <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.user.last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" name="email" id="email" value="{{ request.user.email }}" required>
+                            </div>
+                            <!-- Agrega el campo para la imagen de perfil -->
+                            <div class="form-group">
+                                <label for="imagenPerfil" class="form-label">Cambiar imagen de perfil</label>
+                                <input type="file" class="form-control" name="imagenPerfil" id="imagenPerfil">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'perfil_de_usuario' id=usuario.id %}" type="button" class="btn btn-danger" >Cancelar</a>                            
+                            <button type="submit" class="btn btn-primary" name="editar_perfil">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <!-- Mensajes sweetalert2 -->
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <script>
+                    Swal.fire({
+                        "title":"¡Acción exitosa!",
+                        "text":"{{ message }}",
+                        "icon":"success"
+                    })
+                </script>
+            {% elif message.tags == 'error' %}
+                <script>
+                    Swal.fire({
+                        "title":"¡Error!",
+                        "text":"{{ message }}",
+                        "icon":"error"
+                    })
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock javascript %}
