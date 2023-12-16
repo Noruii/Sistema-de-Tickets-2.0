@@ -57,22 +57,42 @@
                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="first_name" class="form-label">Nombre</label>
+                            <label for="first_name" class="form-label">Nombre</label>
+                            <div class="input-group mb-3">                                
                                 <input type="text" class="form-control" name="first_name" id="first_name" value="{{ request.user.first_name }}" required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="last_name" class="form-label">Apellido</label>
+                            <label for="last_name" class="form-label">Apellido</label>
+                            <div class="input-group mb-3">                                
                                 <input type="text" class="form-control" name="last_name" id="last_name" value="{{ request.user.last_name }}" required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="email" class="form-label">Correo electrónico</label>
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <div class="input-group mb-3">                                
                                 <input type="email" class="form-control" name="email" id="email" value="{{ request.user.email }}" required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-at"></span>
+                                    </div>
+                                </div>
                             </div>
                             <!-- Agrega el campo para la imagen de perfil -->
-                            <div class="form-group">
-                                <label for="imagenPerfil" class="form-label">Cambiar imagen de perfil</label>
+                            <label for="imagenPerfil" class="form-label">Cambiar imagen de perfil</label>
+                            <div class="input-group mb-3">                                
                                 <input type="file" class="form-control" name="imagenPerfil" id="imagenPerfil">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-image"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

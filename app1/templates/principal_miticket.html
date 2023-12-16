@@ -51,7 +51,7 @@
             {% if user.is_superuser or user.is_staff %}
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="#" class="btn-box">
+                        <a href="{% url 'generar_reportes' %}" class="btn-box">
                             <div class="custom-box">
                                 <i class="fas fa-5x fa-file-lines mb-3"></i>
                                 <h4>Generar Reportes</h4>
@@ -60,7 +60,7 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="#" class="btn-box">
+                        <a href="{% url 'gestion_de_usuarios' %}" class="btn-box">
                             <div class="custom-box">
                                 <i class="fas fa-5x fa-users mb-3"></i>
                                 <h4>Gestion de Usuarios</h4>

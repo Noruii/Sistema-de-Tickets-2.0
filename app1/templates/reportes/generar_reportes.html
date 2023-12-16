@@ -1,0 +1,107 @@
+{% extends "baseList.html" %} 
+
+{% block columnas %}
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Correo</th>
+        <th scope="col">fecha login</th>
+    </tr>
+{% endblock columnas %}
+    
+{% block filas %}
+    
+    {% for u in usuarios %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ u.first_name }}</td>
+            <td>{{ u.last_name }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.date_joined }}</td>
+        </tr>
+    {% endfor %}
+{% endblock filas %}
+
+{% block footer %}
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">Correo</th>
+        <th scope="col">fecha login</th>
+    </tr>
+{% endblock footer %}
+
+{% block button %}
+    <a href="{% url 'generar_reportes' %}" class='btn btn-success' >
+        <i class="fas fa-sync-alt"></i> 
+        Refrescar
+    </a>
+{% endblock button %}
+
+{% block javascript %}
+    <script>
+        $(function () {
+            $('#data').DataTable({
+                responsive: true,
+                responsive: {
+                    details: {
+                        display: DataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return 'Detalles para ' + data[1] +" "+ data[2];
+                            }
+                        }),
+                        renderer: DataTable.Responsive.renderer.tableAll({
+                            tableClass: 'table'
+                        })
+                    }
+                },
+            
+                searchPanes: {
+                    initCollapsed: true,
+                    cascadePanes: true,
+                    layout: 'columns-4'
+                },
+                dom: 'PBfrtip', //PB para poder utilizar botones y searchpanels al mismo tiempo
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [1, 2, 3, 4]
+                    }
+                ],
+            
+                // autowidth: false,
+                "language": {
+                    url : "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa-solid fa-file-excel"></i> ',
+                        titleAttr: 'Exportar a Excel',
+                        className: 'btn btn-outline-success',
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa-solid fa-file-pdf"></i> ',
+                        titleAttr: 'Exportar a PDF',
+                        className: 'btn btn-outline-danger',
+                        download: 'open',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa-solid fa-print"></i>',
+                        titleAttr: 'Imprimir',
+                        className: 'btn btn-outline-info',
+                    },
+                ]
+            });
+        });
+    </script>
+{% endblock javascript %}

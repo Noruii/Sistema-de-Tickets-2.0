@@ -73,3 +73,11 @@ def perfil_de_usuario_view(request, id):
         else:
             messages.error(request, f'No se pudiron editar los datos.')
             return redirect('perfil_de_usuario', id=id)
+
+def gestion_de_usuarios_view(request):
+    data = {
+        'icon': '<i class="fa-solid fa-users"></i>',
+        'title': 'Gestion de usuarios',
+        'usuarios': User.objects.all()
+    }
+    return render(request, 'usuarios/gestion_de_usuarios.html', data)

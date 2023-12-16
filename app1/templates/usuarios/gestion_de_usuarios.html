@@ -3,7 +3,6 @@
 {% block columnas %}
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Usuario</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Correo</th>
@@ -15,10 +14,8 @@
 {% block filas %}
     
     {% for u in usuarios %}
-    {% comment %} {% for u in object_list %} asi se hace para la vista UsuariosListView {% endcomment %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ u.username }}</td>
             <td>{{ u.first_name }}</td>
             <td>{{ u.last_name }}</td>
             <td>{{ u.email }}</td>
@@ -34,7 +31,6 @@
 {% block footer %}
     <tr>
         <th scope="col">#</th>
-        <th scope="col">Usuario</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Correo</th>

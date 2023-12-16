@@ -11,12 +11,6 @@ from app1.models import *
 # Create your views here.
 
 # Vistas basadas en funcion
-def usuarios_list(request):
-    data = {
-        'title': 'Listado de usuarios',
-        'usuarios': User.objects.all()
-    }
-    return render(request, 'usuarios/list.html', data)
 
 def iniciar_sesion(request):
     if request.method == 'POST':
@@ -36,6 +30,9 @@ def iniciar_sesion(request):
 
 @login_required
 def cerrar_sesion(request):
+    # TODO: 
+    # Ingeniate como hacer esto... con el sweetalerts
+    # messages.warning(request, '¿Seguro que quiere cerrar sesión?')
     logout(request)
     return redirect('iniciar_sesion')
 
@@ -59,4 +56,3 @@ def principal_miticket_view(request):
 #         context['title'] = 'Listado de usuarios'
 #         # context['object_list'] = Ticket.objects.allK() # puedes sobreescribir el atributo 'object_list' para que en vez del modelo 'User' mande otro modelo
 #         return context
-    
