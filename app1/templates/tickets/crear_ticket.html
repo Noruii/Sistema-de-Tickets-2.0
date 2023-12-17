@@ -1,0 +1,75 @@
+{% extends 'body.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card card-default card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fa-solid fa-ticket"></i>
+            Crear un ticket
+        </h3>
+    </div>
+    
+    <!-- contenido -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-3">
+                <form method="POST" class="form was-validated card card-body" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Asunto</label>
+                        <input type="text" class="form-control" value="{{ asunto }}" name="txtAsunto" id="id_txtAsunto" placeholder="Describir el asunto" required>
+                        <div class="invalid-feedback">Por favor agregar un asunto</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormDepartamento">Departamento</label>
+                        <select class="form-control" name="formControlDepartamento" id="id_formControlDepartamento" required>
+                            <option value="" selected disabled>Seleccione departamento</option>
+                            {% for value, text in departamentos %}
+                                <option value="{{ value }}">{{ text }}</option>
+                            {% endfor %}                            
+                        </select>
+                        <div class="invalid-feedback">Por favor seleccione un departamento</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlDescripcion">Detalles de la problematica</label>
+                        <textarea class="form-control" name="formControlDescripcion" id="id_formControlTextarea1" rows="4" placeholder="Agregar descripción del problema" required>{{ descripcion }}</textarea>
+                        <div class="invalid-feedback">Por favor proporcionar una descripción lo más detallada posible del problema</div>
+                    </div>
+                    <div class="form-group mt-3 gap-2">
+                        <a class="btn btn-danger" href="{% url 'principal_miticket' %}" role="button">Cancelar</a>
+                        <button type="#" class="btn btn-primary">Crear ticket</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <!-- Mensajes sweetalert2 -->
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <script>
+                    Swal.fire({
+                        "icon":"success",
+                        "title":"¡Acción exitosa!",
+                        "text":"{{ message }}",                        
+                    })
+                </script>
+            {% elif message.tags == 'error' %}
+                <script>
+                    Swal.fire({
+                        "icon":"error",
+                        "title":"¡Error!",
+                        "text":"{{ message }}",
+                    })
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock javascript %}

@@ -2,34 +2,51 @@
 
 {% block columnas %}
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo</th>
-        <th scope="col">fecha login</th>
+        <th>#</th>
+        <th>Nombre y apellido</th>
+        <th>Correo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Prioridad</th>
     </tr>
 {% endblock columnas %}
     
 {% block filas %}
     
-    {% for u in usuarios %}
+    {% for t in tickets %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ u.first_name }}</td>
-            <td>{{ u.last_name }}</td>
-            <td>{{ u.email }}</td>
-            <td>{{ u.date_joined }}</td>
+            <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
+            <td>{{ t.email }}</td>
+            <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
+            
+            {% if t.estados.first.estado == 'Abierto' %}
+                <td class="text-success"><b>{{ t.estados.first.estado }}</b></td>
+            {% elif t.estados.first.estado == 'En progreso' %}
+                <td class="text-warning"><b>{{ t.estados.first.estado }}</b></td>
+            {% elif t.estados.first.estado == 'Cerrado' %}
+                <td class="text-danger"><b>{{ t.estados.first.estado }}</b></td>
+            {% endif %}
+
+            {% if t.prioridades.first.prioridad  == 'Baja' %}
+                <td class="text-info"><b>{{ t.prioridades.first.prioridad }}</b></td>
+            {% elif t.prioridades.first.prioridad  == 'Normal' %}
+                <td class="text-warning"><b>{{ t.prioridades.first.prioridad }}</b></td>
+            {% elif t.prioridades.first.prioridad  == 'Alta' %}
+                <td class="text-danger"><b>{{ t.prioridades.first.prioridad }}</b></td>
+            {% endif %}
         </tr>
     {% endfor %}
 {% endblock filas %}
 
 {% block footer %}
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo</th>
-        <th scope="col">fecha login</th>
+        <th>#</th>
+        <th>Nombre y apellido</th>
+        <th>Correo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Prioridad</th>
     </tr>
 {% endblock footer %}
 
@@ -62,7 +79,7 @@
                 searchPanes: {
                     initCollapsed: true,
                     cascadePanes: true,
-                    layout: 'columns-4'
+                    layout: 'columns-5'
                 },
                 dom: 'PBfrtip', //PB para poder utilizar botones y searchpanels al mismo tiempo
                 columnDefs: [
@@ -70,7 +87,7 @@
                         searchPanes: {
                             show: true
                         },
-                        targets: [1, 2, 3, 4]
+                        targets: [1, 2, 3, 4, 5]
                     }
                 ],
             
@@ -91,7 +108,7 @@
                         titleAttr: 'Exportar a PDF',
                         className: 'btn btn-outline-danger',
                         download: 'open',
-                        orientation: 'landscape',
+                        //orientation: 'landscape',
                         pageSize: 'LEGAL',
                     },
                     {

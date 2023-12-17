@@ -6,13 +6,19 @@ class Ticket(models.Model):
     asunto = models.CharField(max_length=200)
     descripcion = models.TextField()
 
-    DEPARTAMENTO_CHOICES = (
-        ('otro', 'Otro'),
-        ('contabilidad', 'Contabilidad'),
-        ('rrhh', 'RRHH'),
-        ('legal', 'Legal'),
-        ('informatica', 'Informatica'),
-    )
+    OTRO = 'Otro'
+    CONTABILIDAD = 'Contabilidad'
+    RRHH = 'RRHH'
+    LEGAL = 'Legal'
+    INFORMATICA = 'Informatica'
+
+    DEPARTAMENTO_CHOICES = [
+        (OTRO, 'Otro'),
+        (CONTABILIDAD, 'Contabilidad'),
+        (RRHH, 'RRHH'),
+        (LEGAL, 'Legal'),
+        (INFORMATICA, 'Informatica'),
+    ]
     departamento = models.CharField(max_length=50, choices=DEPARTAMENTO_CHOICES, default='Otro')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
@@ -42,11 +48,15 @@ class Comentario(models.Model):
         return f"Comentario: {self.id} - Ticket#: {self.FK_id_ticket.id} - Comentado por: {self.usuario.username}"
 
 class Estado(models.Model):
-    ESTADO_CHOICES = (
-        ('Abierto', 'abierto'),
-        ('En progreso', 'en_progreso'),
-        ('Cerrado', 'cerrado'),
-    )
+    ABIERTO = 'Abierto'
+    EN_PROGRESO = 'En progreso'
+    CERRADO = 'Cerrado'
+
+    ESTADO_CHOICES = [
+        (ABIERTO, 'Abierto'),
+        (EN_PROGRESO, 'En progreso'),
+        (CERRADO, 'Cerrado'),
+    ]
     FK_id_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='estados')
     usuario_creacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='estados_creados')
     usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='estados_modificados')
@@ -57,11 +67,15 @@ class Estado(models.Model):
         return f"{self.id} - Ticket#: {self.FK_id_ticket.id} - Estado: {self.estado} - Clasificado por: {self.usuario_creacion.username}"
 
 class Prioridad(models.Model):
-    PRIORIDAD_CHOICES = (
-        ('Normal', 'normal'),
-        ('Baja', 'baja'),
-        ('Alta', 'alta'),
-    )
+    NORMAL = 'Normal'
+    BAJA = 'Baja'
+    ALTA = "Alta"
+
+    PRIORIDAD_CHOICES = [
+        (NORMAL, 'Normal'),
+        (BAJA, 'Baja'),
+        (ALTA, 'Alta'),
+    ]
     FK_id_ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='prioridades')
     usuario_creacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prioridades_creadas')
     usuario_modificacion = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prioridades_modificadas')

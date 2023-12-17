@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from app1.views.views import *
 from app1.views.usuarios.views import *
 from app1.views.reportes.views import *
+from app1.views.tickets.views import *
 
 urlpatterns = [
     path('iniciar_sesion/', iniciar_sesion, name='iniciar_sesion'),
@@ -15,7 +16,8 @@ urlpatterns = [
     path('usuarios/perfil_de_usuario/<int:id>/', perfil_de_usuario_view, name='perfil_de_usuario'),
     path('usuarios/gestion_de_usuarios', gestion_de_usuarios_view, name="gestion_de_usuarios"),
 
-    # Consultar tickets
+    # Crear y Consultar tickets
+    path('tickets/crear_ticket/', crear_ticket_view, name='crear_ticket'),
 
     # Vista de general reportes
 

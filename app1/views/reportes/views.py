@@ -12,6 +12,6 @@ def reportes_view(request):
     data = {
         'icon': '<i class="fa-solid fa-file-lines"></i>',
         'title': 'Generar reportes',        
-        'usuarios': User.objects.all()
+        'tickets': Ticket.objects.all()
     }
     return render(request, 'reportes/generar_reportes.html', data)
