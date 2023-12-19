@@ -1,0 +1,170 @@
+{% extends 'body.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card card-default card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fa-solid fa-comments"></i>
+            Comentar ticket
+        </h3>
+    </div>
+
+    <!-- Descripcion del Ticket -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-3">
+                <div class="card card-primary card-outline bg-light">
+                    <div class="card-header">
+                        <h5 class="card-title">Ticket creado por <b>{{ ticket.usuario.first_name }} {{ ticket.usuario.last_name }}</b> el {{ ticket.fecha_creacion|date:'d-m-Y H:i' }}</h3>
+                        <div class="card-tools">
+                            <a class="btn btn-danger btn-sm" href="{% url 'consultar_ticket' %}" role="button">
+                                <i class="fa-solid fa-share-from-square"></i>
+                                Volver
+                            </a>
+                            <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body text-secondary">
+                        <h5 class="card-title"><b>Asunto</b></h5>
+                        <p class="card-text"> 
+                            &nbsp; {{ ticket.asunto }}
+                        </p>
+
+                        <h5 class="card-title"><b>Descripción</b></h5>
+                        <p class="card-text">
+                            &nbsp; {{ ticket.descripcion }}
+                        </p>
+                        <p class="card-text"><b>Departamento:</b> &nbsp; {{ ticket.departamento }}</p>
+                        <div class="form-inline">
+                            <div class="form-group mr-3">
+                                <label for="estado" style="margin-right: 7px;"><b>Estado:</b></label>
+                                {% if estado_actual.estado == 'Abierto' %}
+                                    <h1 class="text-success" style="font-size: 17px; margin-top: 5px;"></b>{{ estado_actual.estado }}</b></h1>
+                                {% elif estado_actual.estado == 'En progreso' %}
+                                    <h1 class="text-warning" style="font-size: 17px; margin-top: 5px;"></b>{{ estado_actual.estado }}</b></h1>
+                                {% elif estado_actual.estado == 'Cerrado' %}
+                                    <h1 class="text-danger" style="font-size: 17px; margin-top: 5px;"></b>{{ estado_actual.estado }}</b></h1>
+                                {% endif %}
+                            </div>
+                            <div class="form-group mr-3">
+                                <label for="prioridad" style="margin-right: 7px;"><b>Prioridad:</b></label>
+                                {% if prioridad_actual.prioridad  == 'Baja' %}
+                                    <h1 class="text-info" style="font-size: 17px; margin-top: 5px;"></b>{{ prioridad_actual.prioridad }}</b></h1>
+                                {% elif prioridad_actual.prioridad == 'Normal' %}
+                                <h1 class="text-warning" style="font-size: 17px; margin-top: 5px;"></b>{{ prioridad_actual.prioridad }}</b></h1>
+                                {% elif prioridad_actual.prioridad == 'Alta' %}
+                                <h1 class="text-danger" style="font-size: 17px; margin-top: 5px;"></b>{{ prioridad_actual.prioridad }}</b></h1>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        {% if user.is_superuser or user.is_staff %}
+                            <form method="post" action="{% url 'estado_prioridad_update' id=ticket.id %}" class="form-inline">
+                                {% csrf_token %}
+                                <div class="form-group mr-3">
+                                    <label for="estado" style="margin-right: 7px;">Estado</label>
+                                    <select class="form-control" id="estado" name="estado">
+                                        {% for i, j in estados %}
+                                            {% if i == 'Abierto' %}
+                                                <option class="text-success" value="{{ i }}">{{ j }}</option>
+                                            {% elif i == 'En progreso' %}
+                                                <option class=" text-warning" value="{{ i }}">{{ j }}</option>
+                                            {% elif i == 'Cerrado' %}
+                                                <option class=" text-danger" value="{{ i }}">{{ j }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group mr-3">
+                                    <label for="prioridad" style="margin-right: 7px;">Prioridad</label>
+                                    <select class="form-control" id="prioridad" name="prioridad">
+                                        {% for i, j in prioridades %}
+                                            {% if i == 'Baja' %}
+                                                <option class="text-info" value="{{ i }}">{{ j }}</option>
+                                            {% elif i == 'Normal' %}
+                                                <option class=" text-warning" value="{{ i }}">{{ j }}</option>
+                                            {% elif i == 'Alta' %}
+                                                <option class=" text-danger" value="{{ i }}">{{ j }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comentarios -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary card-outline direct-chat direct-chat-primary shadow-none">
+                    <div class="card-header">
+                        <h5 class="card-title">Comentarios</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="direct-chat-messages">
+                            {% for comentario in comentarios %}                            
+                                {% if comentario.usuario.is_superuser or comentario.usuario.is_staff %}
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-infos clearfix">
+                                            <span class="direct-chat-name float-left text-success">{{ comentario.usuario.first_name }} {{ comentario.usuario.last_name }} (Soporte)</span>
+                                            <span class="direct-chat-timestamp float-right text-success">{{ comentario.fecha_creado|date:'d-m-Y H:i' }}</span>
+                                        </div>
+                                        <img class="direct-chat-img" src="{{ comentario.usuario.get_image }}" alt="Message User Image">
+                                        <div class="direct-chat-text">
+                                            {{ comentario.comentario }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="direct-chat-msg right">
+                                        <div class="direct-chat-infos clearfix">
+                                            <span class="direct-chat-name float-right text-primary">{{ comentario.usuario.first_name }} {{ comentario.usuario.last_name }}</span>
+                                            <span class="direct-chat-timestamp float-left text-primary">{{ comentario.fecha_creado|date:'d-m-Y H:i' }}</span>
+                                        </div>
+                                        <img class="direct-chat-img" src="{{ comentario.usuario.get_image }}" alt="Message User Image">
+                                        <div class="direct-chat-text">
+                                            {{ comentario.comentario }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="text-center">
+                                    <h5>Aún no hay comentarios.</h5>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <form action="{% url 'comentar_ticket' id=ticket.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" id="textAreacomentario" name="textAreacomentario" placeholder="Escribir un mensaje ..." class="form-control" required>
+                                <span class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Comentar</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

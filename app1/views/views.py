@@ -30,9 +30,6 @@ def iniciar_sesion(request):
 
 @login_required
 def cerrar_sesion(request):
-    # TODO: 
-    # Ingeniate como hacer esto... con el sweetalerts
-    # messages.warning(request, '¿Seguro que quiere cerrar sesión?')
     logout(request)
     return redirect('iniciar_sesion')
 

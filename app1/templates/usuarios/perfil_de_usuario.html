@@ -106,28 +106,3 @@
 
     </div>
 {% endblock content %}
-
-{% block javascript %}
-    <!-- Mensajes sweetalert2 -->
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'success' %}
-                <script>
-                    Swal.fire({
-                        "title":"¡Acción exitosa!",
-                        "text":"{{ message }}",
-                        "icon":"success"
-                    })
-                </script>
-            {% elif message.tags == 'error' %}
-                <script>
-                    Swal.fire({
-                        "title":"¡Error!",
-                        "text":"{{ message }}",
-                        "icon":"error"
-                    })
-                </script>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-{% endblock javascript %}

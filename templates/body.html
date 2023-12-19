@@ -35,6 +35,36 @@
             <!-- Footer -->
             {% include 'footer.html' %}
         </div>
+        <!-- Mensajes sweetalert2 -->
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <script>
+                        Swal.fire({
+                            "icon":"success",
+                            "title":"¡Acción exitosa!",
+                            "text":"{{ message }}",                        
+                        })
+                    </script>
+                {% elif message.tags == 'error' %}
+                    <script>
+                        Swal.fire({
+                            "icon":"error",
+                            "title":"¡Error!",
+                            "text":"{{ message }}",
+                        })
+                    </script>
+                {% elif message.tags == 'warning' %}
+                    <script>
+                        Swal.fire({
+                            "icon":"warning",
+                            "title":"¡Atención!",
+                            "text":"{{ message }}",                            
+                        })
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <!-- Block javascript -->
         {% block javascript %}
     

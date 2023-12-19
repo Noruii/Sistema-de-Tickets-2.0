@@ -1,0 +1,110 @@
+{% extends "baseList.html" %} 
+
+{% load static %}
+
+{% block columnas %}
+    <tr>
+        <th>#</th>
+        <th>Nombre y Apellido</th>
+        <th>Email</th>
+        <th>Fecha</th>
+        <!-- <th>Asunto</th> -->
+        <th>Departamento</th>
+        <!-- <th>Descripcion</th> -->
+        <th>Opciones</th>
+    </tr>
+{% endblock columnas %}
+    
+{% block filas %}
+    {% if user.is_superuser or user.is_staff %}
+        {% for t in tickets %}
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
+                <td>{{ t.email}}</td>
+                <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
+                <!-- <td>{{ t.asunto}}</td> -->
+                <td>{{ t.departamento}}</td>
+                <!-- <td>{{ t.descripcion}}</td>             -->
+                <td>
+                    {% if t.asignado_a is empty %}
+                        <a href="#" class="btn btn-sm btn-info"><i class='fa fa-solid fa-pencil'></i></a>                    
+                        <a href="#" onclick="eliminar_ticket({{ t.id }})" class='btn btn-sm btn-danger'><i class='fa fa-solid fa-trash'></i></a>                    
+                        <a href="{% url 'comentar_ticket' id=t.id %}" class='btn btn-sm btn-primary'><i class='fa fa-solid fa-comment'></i> Comentar</a>
+                    {% else %}
+                        <a href="#" class="btn btn-sm btn-info disabled"><i class="fas fa-ban"></i></a>                    
+                        <a href="#" class='btn btn-sm btn-danger disabled'><i class="fas fa-ban"></i></a>                   
+                        <a href="{% url 'comentar_ticket' id=t.id %}" class='btn btn-sm btn-primary'><i class='fa fa-solid fa-comment'></i> Comentar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        {% for t in tickets_usuario_especifico %}
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
+                <td>{{ t.email}}</td>
+                <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
+                <!-- <td>{{ t.asunto}}</td> -->
+                <td>{{ t.departamento}}</td>
+                <!-- <td>{{ t.descripcion}}</td>             -->
+                <td>
+                    {% if t.asignado_a is empty %}
+                        <a href="#" class="btn btn-sm btn-info"><i class='fa fa-solid fa-pencil'></i></a>              
+                        <a href="#" onclick="eliminar_ticket({{ t.id }})" class='btn btn-sm btn-danger'><i class='fa fa-solid fa-trash'></i></a>
+                        <a href="#" class='btn btn-sm btn-primary disabled'><i class="fas fa-ban"></i> Comentar</a>                        
+                    {% else %}
+                        <a href="#" class="btn btn-sm btn-info disabled"><i class="fas fa-ban"></i></a>                   
+                        <a href="#" class='btn btn-sm btn-danger disabled'><i class="fas fa-ban"></i></a>
+                        <a href="{% url 'comentar_ticket' id=t.id %}" class='btn btn-sm btn-primary'><i class='fa fa-solid fa-comment'></i> Comentar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock filas %}
+
+{% block footer %}
+    <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        <th>Nombre y Apellido</th>
+        <th>Email</th>
+        <!-- <th>Asunto</th> -->
+        <th>Departamento</th>
+        <!-- <th>Descripcion</th> -->
+        <th>Opciones</th>
+    </tr>
+{% endblock footer %}
+
+{% block javascript %}
+    <!-- datatables -->
+    <script>
+        $(function () {
+            $('#data').DataTable({
+                responsive: true,
+                responsive: {
+                    details: {
+                        display: DataTable.Responsive.display.modal({
+                            header: function (row) {
+                                var data = row.data();
+                                return 'Detalles para ' + data[1];
+                            }
+                        }),
+                        renderer: DataTable.Responsive.renderer.tableAll({
+                            tableClass: 'table'
+                        })
+                    }
+                },
+                // autowidth: false,
+                "language": {
+                    url : "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                },
+            });
+        });
+    </script>
+
+    <!-- Mensajes sweetalert2 -->
+    <script src="{% static '/js/eliminar_ticket.js' %}"></script>
+{% endblock javascript %}
