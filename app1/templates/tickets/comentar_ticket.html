@@ -15,17 +15,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col mt-3">
-                <div class="card card-primary card-outline bg-light">
+                <div class="card card-primary card-outline bg-light collapsed-card">
                     <div class="card-header">
                         <h5 class="card-title">Ticket creado por <b>{{ ticket.usuario.first_name }} {{ ticket.usuario.last_name }}</b> el {{ ticket.fecha_creacion|date:'d-m-Y H:i' }}</h3>
                         <div class="card-tools">
+                            <button type="button" class="btn btn-secondary btn-sm" data-card-widget="collapse">
+                                Ver detalles &nbsp;
+                                <i class="fas fa-minus"></i>
+                            </button>
                             <a class="btn btn-danger btn-sm" href="{% url 'consultar_ticket' %}" role="button">
                                 <i class="fa-solid fa-share-from-square"></i>
                                 Volver
-                            </a>
-                            <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            </a>                            
                         </div>
                     </div>
                     <div class="card-body text-secondary">
@@ -64,7 +65,7 @@
                     </div>
                     <div class="card-footer">
                         {% if user.is_superuser or user.is_staff %}
-                            <form method="post" action="{% url 'estado_prioridad_update' id=ticket.id %}" class="form-inline">
+                            <form method="post" action="{% url 'estado_prioridad_updated' id=ticket.id %}" id="cambiarEstadoForm_{{ ticket.id }}" class="form-inline">
                                 {% csrf_token %}
                                 <div class="form-group mr-3">
                                     <label for="estado" style="margin-right: 7px;">Estado</label>
@@ -94,7 +95,7 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
+                                <button type="button" onclick="cambiar_estado_prioridad({{ ticket.id }})" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
                             </form>
                         {% endif %}
                     </div>
@@ -118,7 +119,14 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="direct-chat-messages">
+                        <style>
+                            .custom-direct-chat-messages {
+                                /* Ajusta el tamaño del cuerpo */
+                                height: 500px;
+                                overflow-y: auto; /* Agrega scroll vertical si el contenido excede el alto */
+                            }
+                        </style>
+                        <div class="custom-direct-chat-messages">
                             {% for comentario in comentarios %}                            
                                 {% if comentario.usuario.is_superuser or comentario.usuario.is_staff %}
                                     <div class="direct-chat-msg">
@@ -146,6 +154,10 @@
                             {% empty %}
                                 <div class="text-center">
                                     <h5>Aún no hay comentarios.</h5>
+                                    <p>
+                                        Una vez comentado el ticket, este pasará a estar '<span style="color: #ffc107;">En progreso</span>'
+                                        y su prioridad '<span style="color: #ffc107;">Normal</span>'.
+                                    </p>
                                 </div>
                             {% endfor %}
                         </div>
@@ -168,3 +180,8 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block javascript %}
+    <!-- Mensajes sweetalert2 -->
+    <script src="{% static '/js/estado_prioridad.js' %}"></script>
+{% endblock javascript %}

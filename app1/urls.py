@@ -19,9 +19,10 @@ urlpatterns = [
     # Crear y Consultar tickets
     path('tickets/crear_ticket/', crear_ticket_view, name='crear_ticket'),
     path('tickets/consultar_ticket/', consultar_ticket_view, name='consultar_ticket'),
+    path('tickets/editar_ticket/<int:id>/', editar_ticket_view, name='editar_ticket'),
     path('eliminar_ticket/<int:id>/', eliminar_ticket, name='eliminar_ticket'),
     path('tickets/comentar_ticket/<int:id>/', comentar_ticket_view, name='comentar_ticket'),
-    path('estado_prioridad_update/<int:id>/', estado_prioridad_update, name='estado_prioridad_update'),
+    path('estado_prioridad_updated/<int:id>/', estado_prioridad_updated, name='estado_prioridad_updated'),
 
     # Vista de Generar reportes
     path('reportes/generar_reportes/', reportes_view, name='generar_reportes'),

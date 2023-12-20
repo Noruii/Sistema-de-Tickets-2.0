@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col mt-3">
-                <form method="POST" class="form was-validated card card-body" novalidate>
+                <form method="POST" class="form was-validated card card-body bg-light" novalidate>
                     {% csrf_token %}
                     <div class="form-group">
                         <label>Asunto</label>
@@ -37,9 +37,9 @@
                         <textarea class="form-control" name="formControlDescripcion" id="id_formControlTextarea1" rows="4" placeholder="Agregar descripción del problema" required>{{ descripcion }}</textarea>
                         <div class="invalid-feedback">Por favor proporcionar una descripción lo más detallada posible del problema</div>
                     </div>
-                    <div class="form-group mt-3 gap-2">
-                        <a class="btn btn-danger" href="{% url 'principal_miticket' %}" role="button">Cancelar</a>
-                        <button type="#" class="btn btn-primary">Crear ticket</button>
+                    <div class="mt-3 gap-2">
+                        <button type="#" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Crear ticket</button>
+                        <a class="btn btn-danger" href="{% url 'principal_miticket' %}" role="button"><i class="fa-solid fa-xmark"></i> Cancelar</a>                        
                     </div>
                 </form>
             </div>

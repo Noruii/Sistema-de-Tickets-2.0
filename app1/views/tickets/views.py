@@ -82,6 +82,47 @@ def consultar_ticket_view(request):
         'tickets_usuario_especifico': tickets_usuario_especifico,
     })
 
+# En este código, primero se realiza la validación de campos obligatorios y se verifica que departamento sea un valor válido. 
+# Si se encuentran errores, se envía un mensaje de error y se redirige de vuelta a la página de edición con el mismo id. 
+# Si todo está bien, se actualizan los datos del ticket y se envía un mensaje de éxito.
+@login_required
+def editar_ticket_view(request, id):
+    # definir la variable fuera del condicional para que este definida y accesible en ambos bloques de código.
+    departamentos = Ticket.DEPARTAMENTO_CHOICES
+
+    # listar los datos por id
+    ticket = get_object_or_404(Ticket, id=id)
+
+    if request.method == 'GET':
+        # Verificar si el usuario es el creador del ticket o si es un administrador
+        if request.user == ticket.usuario or request.user.is_staff or request.user.is_superuser:
+            return render(request, 'tickets/editar_ticket.html', {
+                'ticket': ticket,
+                'departamentos': departamentos
+            })
+        else:
+            # Si el usuario no es el creador del ticket ni es un administrador, 
+            # redirigir a una página de error o a una página que informe que no tiene permisos para acceder a ese ticket
+            raise Http404('No tiene permisos para acceder a este ticket')
+    else:
+        # recibir los datos
+        asunto = request.POST['txtAsunto']
+        departamento = request.POST.get('formControlDepartamento')
+        descripcion = request.POST['formControlDescripcion']
+
+        # Validar campos obligatorios
+        if not asunto or not descripcion:
+            messages.error(request, 'Debe completar todos los campos obligatorios.')
+            return redirect('editar_ticket', id=id)
+
+        # Actualizar los datos
+        ticket.asunto = asunto
+        ticket.departamento = departamento
+        ticket.descripcion = descripcion
+        ticket.save()
+        messages.success(request, '¡Ticket editado exitosamente!')
+        return redirect('consultar_ticket')
+
 @login_required
 def eliminar_ticket(request, id):
     ticket = get_object_or_404(Ticket, id=id)
@@ -134,12 +175,9 @@ def comentar_ticket_view(request, id):
                     estado_actual_update.save()
 
                 messages.success(request, '¡Comentario agregado correctamente!')
-
-                # messages.success(request, f'¡El estado del ticket a pasado a {estado_actual}!')
                 return redirect('comentar_ticket', id=id)
             except IntegrityError:
                 messages.error(request, 'Error al comentar el ticket.')
-                # messages.error(request, 'Error al cambiar el estado y la prioridad.') 
                 return redirect('comentar_ticket', id=id)
 
         return render(request, 'tickets/comentar_ticket.html', {
@@ -156,7 +194,7 @@ def comentar_ticket_view(request, id):
         raise Http404('No tiene permisos para acceder a este ticket')
 
 @login_required
-def estado_prioridad_update(request, id):
+def estado_prioridad_updated(request, id):
     ticket = get_object_or_404(Ticket, id=id)
     estado = Estado.objects.get(FK_id_ticket=ticket)
     prioridad = Prioridad.objects.get(FK_id_ticket=ticket)
@@ -165,17 +203,18 @@ def estado_prioridad_update(request, id):
         try:
             usuario = request.user
 
-            estado_update = request.POST['estado']
-            estado.estado = estado_update
+            estado_updated = request.POST['estado']
+            estado.estado = estado_updated
             estado.usuario_modificacion = usuario
             estado.save()
 
-            prioridad_update = request.POST['prioridad']
-            prioridad.prioridad = prioridad_update
+            prioridad_updated = request.POST['prioridad']
+            prioridad.prioridad = prioridad_updated
             prioridad.usuario_modificacion = usuario
             prioridad.save()
 
-            messages.success(request, '¡Estado y prioridad cambiados exitosamente!')  
+            messages.success(request, '¡Estado y prioridad cambiados exitosamente!')
+            messages.success(request, f'¡El estado y la prioridad del ticket an pasado a {estado_updated} y {prioridad_updated}!')  
             return redirect('comentar_ticket', id=id)
         except:
             messages.error(request, 'Error al cambiar el estado y la prioridad.')  
