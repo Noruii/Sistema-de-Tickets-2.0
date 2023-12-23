@@ -1,0 +1,175 @@
+{% extends 'body.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="card card-default card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            {{ icon | safe }} {{ title }}
+        </h3>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-3">
+
+                    <form method="POST" class="form was-validated card card-body bg-light" novalidate>
+                        {% csrf_token %}
+                        <label for="matricula">Matrícula</label>
+                        <div class="input-group mb-3">                            
+                            <input type="text" name="matricula" id="matricula" class="form-control" value="{{ matricula }}" placeholder="Matrícula del nuevo usuario" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fa-solid fa-id-badge"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="first_name">Nombre</label>
+                        <div class="input-group mb-3">                            
+                            <input type="text" name="first_name" id="first_name" class="form-control" value="{{ nombre }}" placeholder="Nombre del nuevo usuario" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="last_name">Apellido</label>
+                        <div class="input-group mb-3">                            
+                            <input type="text" name="last_name" id="last_name" class="form-control" value="{{ apellido }}" placeholder="Apellido del nuevo usuario" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="email">Correo electrónico</label>
+                        <div class="input-group mb-3">                            
+                            <input type="email" name="email" id="email" class="form-control" value="{{ email }}" placeholder="Correo electrónico del nuevo usuario" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-at"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            a, a:hover{
+                                color:#333
+                            }
+                        </style>
+                        <label for="password">Contraseña</label>
+                        <div class="input-group mb-3" id="show_hide_password">                            
+                            <input class="form-control" type="password" name="password1" id="id_password1" value="{{ password1 }}" placeholder="Escribir una contraseña" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a href=""><i class="fa fa-eye"></i></a>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="" style="font-size: 15px; text-align: justify;">
+                            <li>La contraseña debe tener al menos 8 caracteres.</li>
+                            <li>La contraseña debe contener al menos un número.</li>
+                            <li>La contraseña debe contener al menos una letra mayúscula y una minúscula.</li>
+                            <li>La contraseña debe contener al menos uno de los siguientes caracteres especiales: $ # @.</li>
+                        </ul>
+                        <label for="password">Confirmar Contraseña</label>
+                        <div class="input-group mb-3" id="show_hide_password">                            
+                            <input class="form-control" type="password" name="password2" id="id_password2" value="{{ password2 }}" placeholder="Confirmar la contraseña" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a href=""><i class="fa fa-eye"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="roles">Seleccionar el rol del usuario</label>
+                        <section class="card card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioRol" id="flexRadioBasico" value="Basico" checked>
+                                <label class="form-check-label text-info" data-toggle="tooltip" data-placement="top" title="Usuario basico del sistema de tickets." for="flexRadioDefault1">
+                                    Basico
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioRol" id="flexRadioStaff" value="Staff">
+                                <label class="form-check-label text-success" data-toggle="tooltip" data-placement="top" title="Administrador normal." for="flexRadioDefault2">
+                                    Administrador
+                                </label>
+                            </div>
+                            {% if user.is_superuser %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioRol" id="flexRadioSuperUser" value="SuperUser">
+                                    <label class="form-check-label text-warning" data-toggle="tooltip" data-placement="top" title="El Super Administrador tiene todos los privilegios así como acceso al panel de Django." for="flexRadioDefault3">
+                                        Super Administrador
+                                    </label>
+                                </div>
+                            {% endif %}
+                        </section>
+            
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header card-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-circle-exclamation" style="color: #007bff;"></i> Escriba su contraseña para confirmar.</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="password">Contraseña</label>
+                                        <div class="input-group mb-3" id="show_hide_password">                                            
+                                            <input type="password" name="passwordModal" id="passwordModal" class="form-control" placeholder="Confirmar con su contraseña" required>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <a href=""><i class="fa fa-eye"></i></a>                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-info"><i class="fa-solid fa-user"></i> Crear usuario</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="gap-2">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal"><i class="fa-solid fa-user"></i> Crear usuario</button>
+                            <a class="btn btn-danger" href="{% url 'gestion_de_usuarios' %}" role="button"><i class="fa-solid fa-xmark"></i> Cancelar</a>
+                        </div>
+                    </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<!-- 
+    TODO:
+        Por alguna razon no se esta cambiando el icono...
+-->
+<script>
+    $(document).ready(function() {
+        $("#show_hide_password a").on('click', function(event) {
+            event.preventDefault();
+            console.log("Se hizo clic en el enlace");
+            var icon = $(this).find('i');
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                icon.removeClass("fa-eye-slash");
+                icon.addClass("fa-eye");
+                console.log("Contraseña visible");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                icon.removeClass("fa-eye");
+                icon.addClass("fa-eye-slash");
+                console.log("Contraseña oculta");
+            }
+        });
+    });
+</script>
+{% endblock javascript %}

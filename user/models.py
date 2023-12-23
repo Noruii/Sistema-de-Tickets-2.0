@@ -38,9 +38,7 @@ class User(AbstractUser):
         unique=True
     )
     avatar = models.ImageField(upload_to='avatar/%Y/%m/%d', null=True, blank=True)
-
     objects = CustomUserManager()
-
     USERNAME_FIELD = 'matricula'
 
     # Imagen de default para el usuario

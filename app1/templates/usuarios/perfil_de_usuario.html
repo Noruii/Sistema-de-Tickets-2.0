@@ -6,14 +6,13 @@
     <div class="card card-default card-primary">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fa-solid fa-user"></i>
-                Editar perfil
+                {{ icon | safe }} {{ title }}
             </h3>
         </div>
         
         <div class="d-flex align-items-center justify-content-center mt-3">
             <div class="card card-secundary card-outline">
-                <div class="card-body box-profile">
+                <div class="card-body box-profile bg-light">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle" src="{{ request.user.get_image }}"
                             alt="User profile picture">
@@ -35,7 +34,9 @@
                         </li>
                     </ul>
                     <!-- Botón para abrir el modal -->
-                    <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#editarPerfilModal"><b>Editar perfil</b></a>
+                    <div>
+                        <a href="#" class="btn btn-info btn-block" data-toggle="modal" data-target="#editarPerfilModal"><i class="fa-solid fa-pen-to-square"></i> <b>Editar perfil</b></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,8 +97,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <a href="{% url 'perfil_de_usuario' id=usuario.id %}" type="button" class="btn btn-danger" >Cancelar</a>                            
-                            <button type="submit" class="btn btn-primary" name="editar_perfil">Guardar cambios</button>
+                            <a href="{% url 'perfil_de_usuario' id=usuario.id %}" type="button" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Cancelar</a>                            
+                            <button type="submit" class="btn btn-info" name="editar_perfil"><i class="fa-solid fa-pen-to-square"></i> Guardar cambios</button>
                         </div>
                     </form>
                 </div>

@@ -24,6 +24,8 @@ def crear_ticket_view(request):
         if not request.POST.get('txtAsunto') or not request.POST.get('formControlDepartamento') or not request.POST.get('formControlDescripcion'):
             messages.error(request, 'Por favor, complete todos los campos obligatorios.')
             return render(request, 'tickets/crear_ticket.html', {
+                'icon': '<i class="fa-solid fa-ticket"></i>',
+                'title': 'Crear un ticket',
                 'asunto': asunto,
                 'departamentos': departamentos,
                 'selected_departamento': selected_departamento,
@@ -64,6 +66,8 @@ def crear_ticket_view(request):
             return redirect('crear_ticket')
 
     return render(request, 'tickets/crear_ticket.html', {
+        'icon': '<i class="fa-solid fa-ticket"></i>',
+        'title': 'Crear un ticket',
         'departamentos': departamentos
     })
 
@@ -97,6 +101,8 @@ def editar_ticket_view(request, id):
         # Verificar si el usuario es el creador del ticket o si es un administrador
         if request.user == ticket.usuario or request.user.is_staff or request.user.is_superuser:
             return render(request, 'tickets/editar_ticket.html', {
+                'icon': '<i class="fa-solid fa-ticket"></i>',
+                'title': 'Editar ticket',
                 'ticket': ticket,
                 'departamentos': departamentos
             })
@@ -181,6 +187,8 @@ def comentar_ticket_view(request, id):
                 return redirect('comentar_ticket', id=id)
 
         return render(request, 'tickets/comentar_ticket.html', {
+            'icon': '<i class="fa-solid fa-comments"></i>',
+            'title': 'Comentar ticket',
             'ticket': ticket,
             'comentarios': comentarios,
             'estados': estados,

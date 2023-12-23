@@ -6,8 +6,7 @@
     <div class="card card-default card-primary">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fa-solid fa-ticket"></i>
-                Crear un ticket
+                {{ icon | safe }} {{ title }}
             </h3>
         </div>
         
@@ -47,7 +46,7 @@
                             <div class="invalid-feedback">Por favor proporcionar una descripción lo más detallada posible del problema</div>
                         </div>
                         <div class="gap-2">
-                            <button type="#" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
+                            <button type="#" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
                             <a class="btn btn-danger" href="{% url 'consultar_ticket' %}" role="button"><i class="fa-solid fa-xmark"></i> Cancelar</a>                            
                         </div>
                     </form>

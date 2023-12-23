@@ -18,13 +18,17 @@ def iniciar_sesion(request):
         print(p)
         matricula = request.POST.get('matricula')
         password = request.POST.get('password')
-        user = authenticate(request, matricula=matricula, password=password)
         
+        data = {
+            'matricula': matricula,
+        }
+
+        user = authenticate(request, matricula=matricula, password=password)
         if user is not None:
             login(request, user)
             return redirect('principal_miticket')
-
         messages.error(request, 'La matrícula o la contraseña son incorrectas.')
+        return render(request, 'registro/login.html', data) 
     
     return render(request, 'registro/login.html') 
 

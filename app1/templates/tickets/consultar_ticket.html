@@ -17,6 +17,10 @@
     </tr>
 {% endblock columnas %}
     
+<!-- 
+TODO: 
+    Arreglar repeticion de codigo...
+-->
 {% block filas %}
     {% if user.is_superuser or user.is_staff %}
         {% for t in tickets %}
@@ -45,7 +49,7 @@
                 {% endif %}
                 <td>
                     {% if t.asignado_a is empty %}
-                        <a href="{% url 'editar_ticket' id=t.id %}" class="btn btn-sm btn-info"><i class='fa fa-solid fa-pencil'></i></a>                    
+                        <a href="{% url 'editar_ticket' id=t.id %}" class="btn btn-sm btn-info"><i class="fa-solid fa-pen-to-square"></i></a>                    
                         <a href="#" onclick="eliminar_ticket({{ t.id }})" class='btn btn-sm btn-danger'><i class='fa fa-solid fa-trash'></i></a>                    
                         <a href="{% url 'comentar_ticket' id=t.id %}" class='btn btn-sm btn-primary'><i class='fa fa-solid fa-comment'></i> Comentar</a>
                     {% else %}
@@ -83,7 +87,7 @@
                 {% endif %}
                 <td>
                     {% if t.asignado_a is empty %}
-                        <a href="{% url 'editar_ticket' id=t.id %}" class="btn btn-sm btn-info"><i class='fa fa-solid fa-pencil'></i></a>              
+                        <a href="{% url 'editar_ticket' id=t.id %}" class="btn btn-sm btn-info"><i class="fa-solid fa-pen-to-square"></i></a>              
                         <a href="#" onclick="eliminar_ticket({{ t.id }})" class='btn btn-sm btn-danger'><i class='fa fa-solid fa-trash'></i></a>
                         <a href="#" class='btn btn-sm btn-primary disabled'><i class="fas fa-ban"></i> Comentar</a>                        
                     {% else %}

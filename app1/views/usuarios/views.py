@@ -1,4 +1,4 @@
-from typing import Any
+from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
@@ -19,10 +19,12 @@ def perfil_de_usuario_view(request, id):
         # Verificar si el usuario esta entrando a su propio perfil
         if request.user.id == usuario.id:
             return render(request, 'usuarios/perfil_de_usuario.html', {
+                'icon': '<i class="fa-solid fa-user"></i>',
+                "title": 'Editar perfil',
                 'usuario': usuario
             })
         else:
-            raise Http404('No tiene permisos para acceder a este perfil')
+            raise Http404('No tiene permisos para acceder a este perfil.')
     else:
         if 'editar_perfil' in request.POST:
             # procesar el formulario del modal de editar perfil
@@ -74,10 +76,95 @@ def perfil_de_usuario_view(request, id):
             messages.error(request, f'No se pudiron editar los datos.')
             return redirect('perfil_de_usuario', id=id)
 
+@login_required
 def gestion_de_usuarios_view(request):
-    data = {
+    if request.user.is_superuser or request.user.is_staff:
+        data = {
         'icon': '<i class="fa-solid fa-users"></i>',
         'title': 'Gestion de usuarios',
-        'usuarios': User.objects.all()
-    }
-    return render(request, 'usuarios/gestion_de_usuarios.html', data)
+        'usuarios': User.objects.all() #.exclude(id=request.user.id)
+        }
+        return render(request, 'usuarios/gestion_de_usuarios.html', data)
+    return redirect('principal_miticket')
+
+@login_required
+def crear_usuario_view(request):
+    if request.user.is_superuser or request.user.is_staff:
+        if request.method == 'POST':
+            # Obtener los datos del formulario
+            matricula = request.POST['matricula']
+            nombre = request.POST['first_name']
+            apellido = request.POST['last_name']
+            email = request.POST['email']
+            password1 = request.POST['password1']
+            password2 = request.POST['password2']
+
+            print(matricula, nombre, apellido, email, password1, password2)
+
+            data = {
+                'icon': '<i class="fa-solid fa-user"></i>',
+                'title': 'Crear un usuario',
+                'matricula': matricula,
+                'nombre': nombre,
+                'apellido': apellido,
+                'email': email,
+                'password1': password1,
+                'password2': password2
+            }
+
+            # Verificar que los campos obligatorios estén completos
+            if not matricula or not nombre or not apellido or not email or not password1 or not password2:
+                messages.error(request, 'Por favor, complete todos los campos obligatorios.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            
+            # validar correo
+            # validate_email solo verifica si el correo es valido no verifica si a ese correo es 'real' o enviable
+            try:
+                validate_email(email)
+            except ValidationError:
+                messages.error(request, 'Ingrese un correo electrónico válido.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+
+            if request.user.check_password(request.POST['passwordModal']):
+                if request.POST['password1'] == request.POST['password2']:
+                    try:
+                        rol_de_usuario = request.POST.get('flexRadioRol')
+
+                        # Crear el nuevo usuario
+                        user_args = {
+                            'username': matricula, # Arreglar: pide el username despues de la primera vez por alguna razon...
+                            'matricula': matricula,
+                            'first_name': nombre,
+                            'last_name': apellido,
+                            'email': email,
+                            'password': password1,
+                        }
+
+                        if rol_de_usuario == 'Staff':
+                            user_args['is_staff'] = True
+                        elif rol_de_usuario == 'SuperUser':
+                            user_args['is_superuser'] = True
+
+                        # Se pasa el diccionario al método create_user() utilizando la sintaxis de desempaquetado **
+                        user = User.objects.create_user(**user_args)
+                        user.save()
+                        
+                        messages.success(request, f'Usuario ``{user.first_name} - {user.last_name}`` creado exitosamente')
+                        return redirect('gestion_de_usuarios')
+                    except IntegrityError as error:
+                        print(error)
+                        messages.error(request, 'Error al crear el usuario. Vuelva a intentarlo y asegúrese de que todos los datos estén correctos.')
+                        return render(request, 'usuarios/crear_usuario.html', data)
+                else:
+                    messages.error(request, 'Las contraseñas del usuario no coinciden.')
+                    return render(request, 'usuarios/crear_usuario.html', data)
+            else:
+                messages.error(request, 'Contraseña de confirmación incorrecta.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+
+        # Mostrar el formulario para crear un nuevo usuario
+        return render(request, 'usuarios/crear_usuario.html', {
+            'icon': '<i class="fa-solid fa-user"></i>',
+            'title': 'Crear un usuario'
+        })
+    return redirect('gestion_de_usuarios')
