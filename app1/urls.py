@@ -16,6 +16,7 @@ urlpatterns = [
     path('usuarios/perfil_de_usuario/<int:id>/', perfil_de_usuario_view, name='perfil_de_usuario'),
     path('usuarios/gestion_de_usuarios', gestion_de_usuarios_view, name="gestion_de_usuarios"),
     path('usuarios/crear_usuario/', crear_usuario_view, name='crear_usuario'),
+    path('usuarios/editar_usuario/<int:id>/', editar_usuario_view, name='editar_usuario'),
 
     # Crear y Consultar tickets
     path('tickets/crear_ticket/', crear_ticket_view, name='crear_ticket'),

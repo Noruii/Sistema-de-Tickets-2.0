@@ -124,6 +124,23 @@ def crear_usuario_view(request):
             except ValidationError:
                 messages.error(request, 'Ingrese un correo electrónico válido.')
                 return render(request, 'usuarios/crear_usuario.html', data)
+            
+            # Validar que la contraseña cumple los requisitos
+            if len(password1) < 8:
+                messages.error(request, 'La contraseña debe tener al menos 8 caracteres.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            if not any(char.isdigit() for char in password1):
+                messages.error(request,'La contraseña debe contener al menos un número.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            if not any(char.isupper() for char in password1):
+                messages.error(request,'La contraseña debe contener al menos una letra mayúscula.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            if not any(char.islower() for char in password1):
+                messages.error(request,'La contraseña debe contener al menos una letra minúscula.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            if not any(char in ['$', '#', '@'] for char in password1):
+                messages.error(request,'La contraseña debe contener al menos uno de los siguientes caracteres especiales: $ # @.')
+                return render(request, 'usuarios/crear_usuario.html', data)
 
             if request.user.check_password(request.POST['passwordModal']):
                 if request.POST['password1'] == request.POST['password2']:
@@ -132,7 +149,7 @@ def crear_usuario_view(request):
 
                         # Crear el nuevo usuario
                         user_args = {
-                            'username': matricula, # Arreglar: pide el username despues de la primera vez por alguna razon...
+                            'username': matricula, # Arreglar: el username sigue siendo requerido por alguna razon...
                             'matricula': matricula,
                             'first_name': nombre,
                             'last_name': apellido,
@@ -153,7 +170,7 @@ def crear_usuario_view(request):
                         return redirect('gestion_de_usuarios')
                     except IntegrityError as error:
                         print(error)
-                        messages.error(request, 'Error al crear el usuario. Vuelva a intentarlo y asegúrese de que todos los datos estén correctos.')
+                        messages.error(request, 'El usuario que intenta crear ya existe.')
                         return render(request, 'usuarios/crear_usuario.html', data)
                 else:
                     messages.error(request, 'Las contraseñas del usuario no coinciden.')
@@ -168,3 +185,64 @@ def crear_usuario_view(request):
             'title': 'Crear un usuario'
         })
     return redirect('gestion_de_usuarios')
+
+@login_required
+def editar_usuario_view(request, id):
+    if request.user.is_superuser or request.user.is_staff:
+        usuario = get_object_or_404(User, id=id)
+
+        if request.method == 'POST':
+            # Obtener los datos del formulario
+            nombre = request.POST['first_name']
+            apellido = request.POST['last_name']
+            email = request.POST['email']
+            rol_de_usuario = request.POST.get('flexRadioRol')
+
+            # Validar campos obligatorios estan llenos
+            if not nombre or not apellido or not email:
+                messages.error(request, 'Debe completar todos los campos obligatorios.')
+                return redirect('editar_usuario', id=id)
+            
+            # validar correo
+            # validate_email solo verifica si el correo es valido no verifica si a ese correo es 'real' o enviable
+            try:
+                validate_email(email)
+            except ValidationError:
+                messages.error(request, 'Ingrese un correo electrónico válido.')
+                return redirect('editar_usuario', id=id)
+
+            if request.user.check_password(request.POST['passwordModal']):
+                try:
+                    # actualizar los datos
+                    staff = False
+                    superuser = False
+
+                    if rol_de_usuario == 'Staff':
+                        staff = True
+                    elif rol_de_usuario == 'SuperUser':
+                        staff = True
+                        superuser = True
+
+                    usuario.first_name = nombre
+                    usuario.last_name = apellido
+                    usuario.email = email
+                    usuario.is_staff = staff
+                    usuario.is_superuser = superuser
+                    usuario.save()
+
+                    messages.success(request, f'¡Usuario ``{usuario.matricula}: {usuario.first_name} {usuario.last_name}`` editado exitosamente!')
+                    return redirect('gestion_de_usuarios')
+                except IntegrityError:
+                    messages.error(request, 'Error al editar el usuario.')
+                    return redirect('gestion_de_usuarios')
+            else:
+                messages.error(request, 'Contraseña de confirmación incorrecta. Vuelva a intentarlo.')
+                return redirect('editar_usuario', id)
+
+        return render(request, 'usuarios/editar_usuario.html', {
+            'icon': '<i class="fa-solid fa-user"></i>',
+            'title': 'Editar usuario',
+            'usuario': usuario
+        })
+    else:
+        raise Http404('No tiene permisos para acceder a esta pagina')

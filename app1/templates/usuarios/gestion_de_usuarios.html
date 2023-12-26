@@ -44,7 +44,7 @@
                 <td class="text-center"><i class="fa-solid fa-xmark" style="color: #f40b0b;"></i></td>
 
                 <td>
-                    <a href="#" class="btn btn-sm btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'editar_usuario' id=u.id %}" class="btn btn-sm btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
                     <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
                 </td>
             {% endif %}
