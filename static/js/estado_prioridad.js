@@ -5,10 +5,10 @@ function cambiar_estado_prioridad(id) {
         icon: "warning",
         showCancelButton: true,
         cancelButtonText: '<i class="fa-solid fa-xmark"></i> No &nbsp;',
-        confirmButtonText: '<i class="fa-solid fa-right-from-bracket"></i> Si &nbsp;',
+        confirmButtonText: '<i class="fa-solid fa-check"></i> Si &nbsp;',
         confirmButtonColor: "#dc3545",
         customClass: {
-            confirmButton: 'btn btn-danger mr-2',
+            confirmButton: 'btn btn-info mr-2',
             cancelButton: 'btn btn-secondary'
         },
         buttonsStyling: false,

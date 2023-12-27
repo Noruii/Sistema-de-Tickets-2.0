@@ -1,4 +1,6 @@
-{% extends "baseList.html" %} 
+{% extends "baseList.html" %}
+
+{% load static %}
 
 {% block columnas %}
     <tr>
@@ -45,7 +47,7 @@
 
                 <td>
                     <a href="{% url 'editar_usuario' id=u.id %}" class="btn btn-sm btn-info"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="#" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+                    <a href="#" onclick="eliminar_usuario({{ u.id }})" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
                 </td>
             {% endif %}
         </tr>
@@ -70,3 +72,8 @@
         <i class="fa-solid fa-plus"></i> Nuevo Usuario
     </a>
 {% endblock button %}
+
+{% block javascript %}
+    <script src="{% static '/js/datatable_gestion_de_usuarios.js' %}"></script>
+    <script src="{% static '/js/eliminar_usuario.js' %}"></script>
+{% endblock javascript %}

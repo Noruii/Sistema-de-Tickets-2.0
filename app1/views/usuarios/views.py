@@ -1,5 +1,6 @@
+import json
 from django.db import IntegrityError
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -246,3 +247,21 @@ def editar_usuario_view(request, id):
         })
     else:
         raise Http404('No tiene permisos para acceder a esta pagina')
+
+@login_required
+def eliminar_usuario(request, id):
+    usuario = get_object_or_404(User, id=id)
+    # usuario.delete()
+    messages.success(request, f'¡Usuario ``{usuario.matricula}: {usuario.first_name} {usuario.last_name}`` eliminado exitosamente!')
+    return redirect('gestion_de_usuarios')
+
+@login_required
+def validar_contrasena(request):
+    if request.method == 'POST':
+        # Analizar el cuerpo de la solicitud y obtener los datos JSON
+        data = json.loads(request.body)
+        print('data: ', data)
+        password = data.get('password')        
+        if password and request.user.check_password(password):
+            return JsonResponse({'valid': True})
+    return JsonResponse({'valid': False})
