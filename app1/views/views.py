@@ -14,8 +14,6 @@ from app1.models import *
 
 def iniciar_sesion(request):
     if request.method == 'POST':
-        p = request.POST
-        print(p)
         matricula = request.POST.get('matricula')
         password = request.POST.get('password')
         

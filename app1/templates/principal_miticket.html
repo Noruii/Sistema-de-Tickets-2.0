@@ -75,3 +75,39 @@
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+    <!-- Mensaje de bienvenida -->
+    <script>
+        function mensajeBienvenida() {
+            const ya_mostrado = localStorage.getItem('mensajeMostrado');
+            if (!ya_mostrado) {
+                let usuario = '{{ request.user.matricula }}'
+                console.log(usuario)        
+                let mensaje = '';
+                if (usuario.toLowerCase().startsWith('p')) {
+                    mensaje = '¡Bienvenido, maestro!';
+                } else {
+                    mensaje = '¡Bienvenido, estudiante!';
+                }  
+                Swal.fire({
+                    icon: 'success',
+                    title: mensaje,
+                    text: "{{ request.user.first_name }} {{ request.user.last_name }}",                
+                    imageUrl: "{{ request.user.get_image }}",
+                    imageHeight: 100,
+                    imageAlt: "Custom image",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+
+                localStorage.setItem('mensajeMostrado', true);
+            }
+        }         
+        
+        window.addEventListener('DOMContentLoaded', (event) => {
+            mensajeBienvenida();
+        });
+    </script>
+{% endblock javascript %}

@@ -23,6 +23,7 @@ function cerrar_sesion() {
     })
     .then(function (result) {
         if (result.isConfirmed) {
+            localStorage.clear(); // limpiar el localStorage para que se muestre el mensaje de bienvenida nuevamente al iniciar sesion
             window.location.href = "/sdt/cerrar_sesion/";
         }
         //else if (result.isDismissed) {
