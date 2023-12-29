@@ -37,6 +37,9 @@
                     <div>
                         <a href="#" class="btn btn-info btn-block" data-toggle="modal" data-target="#editarPerfilModal"><i class="fa-solid fa-pen-to-square"></i> <b>Editar perfil</b></a>
                     </div>
+                    <div class="mt-2">
+                        <a href="#" class="btn btn-info btn-block" data-toggle="modal" data-target="#modalChangePassword"><i class="fa-solid fa-lock"></i> <b>Cambiar contraseña</b></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,7 +48,7 @@
         <div class="modal fade" id="editarPerfilModal" tabindex="-1" aria-labelledby="editarPerfilModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header card-header">
                         <h5 class="modal-title" id="editarPerfilModalLabel">
                             <i class="fa-solid fa-user" style="color: #007bff;"></i>
                             Editar perfil
@@ -105,5 +108,78 @@
             </div>
         </div>
 
+        <!-- Modal cambiar contraseña -->
+        <div class="modal fade" id="modalChangePassword" tabindex="-1" role="dialog" aria-labelledby="modalChangePasswordLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header card-header">
+                        <h5 class="modal-title" id="modalChangePasswordLabel">
+                            <i class="fa-solid fa-lock" style="color: #007bff;"></i>
+                            Editar contraseña
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                        </button>
+                    </div>
+                    <form method="POST" class="form was-validated" novalidate>
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <label for="password">Contraseña actual</label>
+                            <div class="input-group mb-3">                            
+                                <input type="password" class="form-control" name="password1" id="id_password1" placeholder="" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="password_show_hide_pass1(event);">
+                                        <a href=""><i class="fas fa-eye" id="show_eye_pass1"></i></a>
+                                        <a href=""><i class="fas fa-eye-slash d-none" id="hide_eye_pass1"></i></a>
+                                    </span>
+                                </div>
+                                <div class="invalid-feedback">Por favor agregue la contraseña</div>
+                            </div>
+                            <label for="password">Contraseña nueva</label>
+                            <div class="input-group mb-3">                            
+                                <input type="password" class="form-control" name="password2" id="id_password2" value="{{ password2 }}" placeholder="" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="password_show_hide_pass2(event);">
+                                        <a href=""><i class="fas fa-eye" id="show_eye_pass2"></i></a>
+                                        <a href=""><i class="fas fa-eye-slash d-none" id="hide_eye_pass2"></i></a>
+                                    </span>
+                                </div>
+                                <div class="invalid-feedback">Por favor confirmar la contraseña</div>
+                            </div>
+                            <label for="password">Confirmar contraseña nueva</label>
+                            <div class="input-group mb-3">                                            
+                                <input type="password" class="form-control" name="passwordModal" id="id_passwordModal" value="{{ password3 }}" placeholder="" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="password_show_hide_modal(event);">
+                                        <a href=""><i class="fas fa-eye" id="show_eye_modal"></i></a>
+                                        <a href=""><i class="fas fa-eye-slash d-none" id="hide_eye_modal"></i></a>
+                                    </span>
+                                </div>
+                                <div class="invalid-feedback">Por favor confirmar con su contraseña</div>
+                            </div>
+                            <div class="form-group">
+                                <b style="font-size: 20px; text-align: center;">NOTA</b>
+                                <ul style="font-size: 15px; text-align: justify;">
+                                    <li>La contraseña debe tener al menos 8 caracteres.</li>
+                                    <li>La contraseña debe contener al menos un número.</li>
+                                    <li>La contraseña debe contener al menos una letra mayúscula y una minúscula.</li>
+                                    <li>La contraseña debe contener al menos uno de los siguientes caracteres especiales: $ # @.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'perfil_de_usuario' id=usuario.id %}" type="button" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Cancelar</a> 
+                            <button type="submit" class="btn btn-info" name="cambiar_contrasena"><i class="fa-solid fa-pen-to-square"></i> Cambiar contraseña</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock content %}
+
+{% block javascript %}
+    <!-- Para mostrar y ocultar la contraseña -->
+    <script src="{% static '/js/mostrar_clave.js' %}"></script>
+{% endblock javascript %}

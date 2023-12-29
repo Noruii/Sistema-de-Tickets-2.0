@@ -45,17 +45,17 @@ function password_show_hide_pass2(event) {
 function password_show_hide_modal(event) {
     event.preventDefault()
 
-    var passwordModal = document.getElementById("passwordModal");
+    var id_passwordModal = document.getElementById("id_passwordModal");
     var show_eye_modal = document.getElementById("show_eye_modal");
     var hide_eye_modal = document.getElementById("hide_eye_modal");
 
-    if (passwordModal.type === "password") {
-        passwordModal.type = "text";
+    if (id_passwordModal.type === "password") {
+        id_passwordModal.type = "text";
         hide_eye_modal.classList.remove("d-none");
         show_eye_modal.classList.add("d-none");
 
     } else {
-        passwordModal.type = "password";
+        id_passwordModal.type = "password";
         hide_eye_modal.classList.add("d-none");
         show_eye_modal.classList.remove("d-none");
 

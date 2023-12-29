@@ -30,8 +30,8 @@
                     <span class="float-right text-muted text-sm">3 mins</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalChangePassword">
-                    <i class="fas fa-lock mr-2"></i> Editar contraseña
+                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#modalAyuda">
+                    <i class="fa-solid fa-question mr-3"></i>Ayuda
                     <span class="float-right text-muted text-sm">12 hours</span>
                 </a>
                 <div class="dropdown-divider"></div>
@@ -42,20 +42,7 @@
         </li>
         <!-- Mensajes sweetalert2 -->
         <script src="{% static '/js/cerrar_sesion.js' %}"></script>
-        <!-- Mensajes sweetalert2 -->
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'warning' %}
-                    <script>
-                        Swal.fire({
-                            "icon":"warning",
-                            "title":"¡Atención!",
-                            "text":"{{ message }}",                            
-                        })
-                    </script>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+
         <li class="nav-item">
             <a class="nav-link" href="#" onclick="cerrar_sesion()">
                 <i class="fas fa-power-off" aria-hidden="true"></i>
@@ -64,70 +51,33 @@
     </ul>
 </nav>
 
-<!-- Modal cambiar contraseña -->
-<div class="modal fade" id="modalChangePassword" tabindex="-1" role="dialog" aria-labelledby="modalChangePasswordLabel" aria-hidden="true">
+<!-- Modal Ayuda -->
+<div class="modal fade" id="modalAyuda" tabindex="-1" role="dialog" aria-labelledby="modalAyudaLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="editarPerfilModalLabel">
-                    <i class="fa-solid fa-lock" style="color: #007bff;"></i>
-                    Editar contraseña
+                <h5 class="modal-title" id="modalAyudaLabel">
+                    <i class="fa-solid fa-question mr-1" style="color: #007bff;"></i>
+                    Ayuda
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
                 </button>
+            </div>            
+            <div class="modal-body">
+                <div class="form-group">
+                    <b style="font-size: 20px; text-align: center;">Ayuda aqui...</b>
+                    <ul style="font-size: 15px; text-align: justify;">
+                        <li>...</li>
+                        <li>...</li>
+                        <li>...</li>
+                        <li>...</li>
+                    </ul>
+                </div>
             </div>
-            <!-- TODO: 
-            Terminar de dar funcionalidad
-            -->
-            <form action="" method="POST">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <label for="password">Contraseña actual</label>
-                    <div class="input-group mb-3">                        
-                        <input type="password" name="password1" required id="password1" class="form-control"
-                        placeholder="Escriba su contraseña actual">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="password">Contraseña nueva</label>
-                    <div class="input-group mb-3">                        
-                        <input type="password" name="password2" required id="password2" class="form-control"
-                        placeholder="Nueva contraseña">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="password">Confirmar contraseña nueva</label>
-                    <div class="input-group mb-3">                        
-                        <input type="password" name="password3" required id="password3" class="form-control"
-                        placeholder="Confirmar nueva contraseña">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <b style="font-size: 20px; text-align: center;">NOTA</b>
-                        <ul style="font-size: 15px; text-align: justify;">
-                            <li>La contraseña debe tener al menos 8 caracteres.</li>
-                            <li>La contraseña debe contener al menos un número.</li>
-                            <li>La contraseña debe contener al menos una letra mayúscula y una minúscula.</li>
-                            <li>La contraseña debe contener al menos uno de los siguientes caracteres especiales: $ # @.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa-solid fa-xmark"></i> Cancelar</a>
-                    <button type="submit" class="btn btn-info" name="cambiar_contraseña"><i class="fa-solid fa-pen-to-square"></i> Cambiar contraseña</button>
-                </div>
-            </form>
+            <div class="modal-footer">
+                <a href="#" type="button" class="btn btn-info" data-dismiss="modal"><i class="fa-solid fa-xmark"></i> Cerrar</a>
+            </div>
         </div>
     </div>
 </div>
