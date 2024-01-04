@@ -140,6 +140,10 @@ def eliminar_ticket(request, id):
 @login_required
 def comentar_ticket_view(request, id):
     ticket = get_object_or_404(Ticket, id=id)
+    try:
+        asignado_a = get_object_or_404(User, id=ticket.asignado_a_id)
+    except:
+        asignado_a = None
     comentarios = Comentario.objects.filter(FK_id_ticket=ticket)
     estados = Estado.ESTADO_CHOICES
     prioridades = Prioridad.PRIORIDAD_CHOICES
@@ -194,7 +198,8 @@ def comentar_ticket_view(request, id):
             'estados': estados,
             'estado_actual': estado_actual,
             'prioridades': prioridades,
-            'prioridad_actual': prioridad_actual
+            'prioridad_actual': prioridad_actual,
+            'asignado_a': asignado_a
         })
     else:
         # Si el usuario no es el creador del ticket ni es un administrador, 

@@ -5,6 +5,7 @@
 {% block columnas %}
     <tr>
         <th>#</th>
+        <th>Matrícula</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Correo</th>
@@ -22,7 +23,8 @@
 {% block filas %}    
     {% for u in usuarios %}
         <tr>
-            <td>{{ forloop.counter }}</td>
+            <th>{{ forloop.counter }}</th>
+            <td>{{ u.matricula }}</td>
             <td>{{ u.first_name }}</td>
             <td>{{ u.last_name }}</td>
             <td>{{ u.email }}</td>
@@ -57,6 +59,7 @@
 {% block footer %}
     <tr>
         <th>#</th>
+        <th>Matrícula</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Correo</th>
@@ -74,6 +77,8 @@
 {% endblock button %}
 
 {% block javascript %}
+    <!-- datatables -->
     <script src="{% static '/js/datatable_gestion_de_usuarios.js' %}"></script>
+    <!-- Mensajes sweetalert2 -->
     <script src="{% static '/js/eliminar_usuario.js' %}"></script>
 {% endblock javascript %}

@@ -29,6 +29,12 @@
                         </div>
                     </div>
                     <div class="card-body text-secondary">
+                        {% if ticket.asignado_a %}
+                            <p class="card-text text-success"><b class="text-muted">Asignado a:</b> &nbsp; {{ asignado_a.first_name }} {{ asignado_a.last_name }}</p>
+                        {% else %}
+                            <p class="card-text text-warning"><b class="text-muted">Asignado a:</b> &nbsp; Ticket aún no asignado</p>
+                        {% endif %}
+
                         <h5 class="card-title"><b>Asunto</b></h5>
                         <p class="card-text"> 
                             &nbsp; {{ ticket.asunto }}
@@ -39,6 +45,7 @@
                             &nbsp; {{ ticket.descripcion }}
                         </p>
                         <p class="card-text"><b>Departamento:</b> &nbsp; {{ ticket.departamento }}</p>
+                        
                         <div class="form-inline">
                             <div class="form-group mr-3">
                                 <label for="estado" style="margin-right: 7px;"><b>Estado:</b></label>
@@ -151,12 +158,13 @@
                                     </div>
                                 {% endif %}
                             {% empty %}
-                                <div class="text-center">
+                                <div class="text-center mt-4">
                                     <h5>Aún no hay comentarios.</h5>
                                     <p>
                                         Una vez comentado el ticket, este pasará a estar '<span style="color: #ffc107;">En progreso</span>'
                                         y su prioridad '<span style="color: #ffc107;">Normal</span>'.
                                     </p>
+                                    <b>También le será asignado automáticamente.</b>
                                 </div>
                             {% endfor %}
                         </div>

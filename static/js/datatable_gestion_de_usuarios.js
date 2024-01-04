@@ -6,7 +6,7 @@ $(function () {
                 display: DataTable.Responsive.display.modal({
                     header: function (row) {
                         var data = row.data();
-                        return 'Detalles para ' + data[1] +" "+ data[2];
+                        return 'Detalles para ' + data[1] +": "+ data[2]+" "+ data[3];
                     }
                 }),
                 renderer: DataTable.Responsive.renderer.tableAll({

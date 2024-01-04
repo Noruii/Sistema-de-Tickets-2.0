@@ -3,14 +3,22 @@
 {% load static %}
 
 {% block columnas %}
+    <!-- Estilos para el filtro y el length (dom: 'lf') porque hay un problema con el jQuery y se están organizando uno arriba del otro en vez de en un bloque. -->
+    <style>
+        div.dataTables_filter,
+        div.dataTables_length {
+            display: inline-block;
+            margin-left: 1em;
+        }
+    </style>
+
     <tr>
         <th>#</th>
+        <th>Matrícula</th>
         <th>Nombre y Apellido</th>
         <th>Email</th>
         <th>Fecha</th>
-        <!-- <th>Asunto</th> -->
         <th>Departamento</th>
-        <!-- <th>Descripcion</th> -->
         <th>Estado</th>
         <th>Prioridad</th>
         <th>Opciones</th>
@@ -26,12 +34,11 @@ TODO:
         {% for t in tickets %}
             <tr>
                 <th>{{ forloop.counter }}</th>
+                <td>{{ t.usuario.matricula }}</td>
                 <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
                 <td>{{ t.email}}</td>
                 <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
-                <!-- <td>{{ t.asunto}}</td> -->
                 <td>{{ t.departamento}}</td>
-                <!-- <td>{{ t.descripcion}}</td>             -->
                 {% if t.estados.first.estado == 'Abierto' %}
                     <td class="text-success"><b>{{ t.estados.first.estado }}</b></td>
                 {% elif t.estados.first.estado == 'En progreso' %}
@@ -64,12 +71,11 @@ TODO:
         {% for t in tickets_usuario_especifico %}
             <tr>
                 <th>{{ forloop.counter }}</th>
+                <td>{{ t.usuario.matricula }}</td>
                 <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
                 <td>{{ t.email}}</td>
-                <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
-                <!-- <td>{{ t.asunto}}</td> -->
-                <td>{{ t.departamento}}</td>
-                <!-- <td>{{ t.descripcion}}</td>             -->
+                <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>                
+                <td>{{ t.departamento}}</td>                
                 {% if t.estados.first.estado == 'Abierto' %}
                     <td class="text-success"><b>{{ t.estados.first.estado }}</b></td>
                 {% elif t.estados.first.estado == 'En progreso' %}
@@ -104,12 +110,11 @@ TODO:
 {% block footer %}
     <tr>
         <th>#</th>
-        <th>Fecha</th>
+        <th>Matrícula</th>
         <th>Nombre y Apellido</th>
         <th>Email</th>
-        <!-- <th>Asunto</th> -->
+        <th>Fecha</th>
         <th>Departamento</th>
-        <!-- <th>Descripcion</th> -->
         <th>Estado</th>
         <th>Prioridad</th>
         <th>Opciones</th>

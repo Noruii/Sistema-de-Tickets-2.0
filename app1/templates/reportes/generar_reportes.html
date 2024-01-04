@@ -5,6 +5,7 @@
 {% block columnas %}
     <tr>
         <th>#</th>
+        <th>Matrícula</th>
         <th>Nombre y apellido</th>
         <th>Correo</th>
         <th>Fecha</th>
@@ -17,7 +18,8 @@
     
     {% for t in tickets %}
         <tr>
-            <td>{{ forloop.counter }}</td>
+            <th>{{ forloop.counter }}</th>
+            <td>{{ t.usuario.matricula }}</td>
             <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
             <td>{{ t.email }}</td>
             <td>{{ t.fecha_creacion|date:'d-m-Y H:i'}}</td>
@@ -44,6 +46,7 @@
 {% block footer %}
     <tr>
         <th>#</th>
+        <th>Matrícula</th>
         <th>Nombre y apellido</th>
         <th>Correo</th>
         <th>Fecha</th>
@@ -60,5 +63,6 @@
 {% endblock button %}
 
 {% block javascript %}
+    <!-- datatables -->
     <script src="{% static '/js/datatable_generar_reportes.js' %}"></script>
 {% endblock javascript %}
