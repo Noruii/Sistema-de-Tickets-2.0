@@ -24,7 +24,11 @@
         .btn-box {
             text-decoration: none;
             /* Elimina el subrayado del enlace */
-        }
+        }        
+        .swal2-image {
+            /* Para mostrar la imagen del sweetalert en circular */
+            border-radius: 50%;
+        }          
     </style>
     <div class="card-body">
         <div class="container">
@@ -99,7 +103,14 @@
                     imageAlt: "Custom image",
                     timer: 3000,
                     timerProgressBar: true,
-                    showConfirmButton: false
+                    showConfirmButton: false,
+                    /* Para mostrar la imagen del sweetalert en circular */
+                    didRender: function() {
+                        const image = document.querySelector('.swal2-image');
+                        if (image) {
+                            image.classList.add('swal2-image--circular');
+                        }
+                    }
                 });
 
                 localStorage.setItem('mensajeMostrado', true);

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps
     'app1',
-    'user'
+    'user',
+    'app1.templatetags.my_filters',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,11 @@ MEDIA_URL = '/media/'
 
 # Custom user model
 AUTH_USER_MODEL = 'user.User'
+
+# EMAIL
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'SistemaDeTicketsDjango@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

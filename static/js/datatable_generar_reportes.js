@@ -20,7 +20,7 @@ $(function () {
             cascadePanes: true,
             layout: 'columns-5'
         },
-        dom: 'PBfrtip', //PB para poder utilizar botones y searchpanels al mismo tiempo
+        dom: 'PBlfrtip', //PB para poder utilizar botones y searchpanels al mismo tiempo
         columnDefs: [
             {
                 searchPanes: {

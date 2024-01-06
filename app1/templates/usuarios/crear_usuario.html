@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col mt-3">
 
-                    <form method="POST" class="form was-validated card card-body bg-light" novalidate>
+                    <form method="POST" class="needs-validation card card-body bg-light" novalidate>
                         {% csrf_token %}
                         <label for="matricula">Matrícula</label>
                         <div class="input-group mb-3">                            
@@ -139,11 +139,11 @@
                             </div>
                         </div>
 
-                        <style>
+                        <!-- <style>
                             a, a:hover{
                                 color:#333
                             }
-                        </style>
+                        </style> -->
             
                         <div class="gap-2">
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal"><i class="fa-solid fa-user"></i> Crear usuario</button>
@@ -161,4 +161,6 @@
 {% block javascript %}
     <!-- Para mostrar y ocultar la contraseña -->
     <script src="{% static '/js/mostrar_clave.js' %}"></script>
+    <!-- Validar campos de formulario -->
+    <script src="{% static 'js/validar_campos.js' %}"></script>
 {% endblock javascript %}

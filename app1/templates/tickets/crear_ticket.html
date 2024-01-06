@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col mt-3">
-                <form method="POST" class="form was-validated card card-body bg-light" novalidate>
+                <form method="POST" class="needs-validation card card-body bg-light" novalidate>
                     {% csrf_token %}
                     <div class="form-group">
                         <label>Asunto</label>
@@ -47,3 +47,8 @@
 
 </div>
 {% endblock content %}
+
+{% block javascript %}
+    <!-- Validar campos de formulario -->
+    <script src="{% static 'js/validar_campos.js' %}"></script>
+{% endblock javascript %}

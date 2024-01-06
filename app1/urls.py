@@ -11,6 +11,10 @@ urlpatterns = [
     path('principal_miticket/', principal_miticket_view, name='principal_miticket'),
 
     # Vistas de Django de recuperar contraseña
+    path('reset/password_reset/', auth_views.PasswordResetView.as_view(template_name='registro/registration/password_reset_form.html', email_template_name='registro/registration/password_reset_email.html'), name="password_reset"),
+    path('reset/password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='registro/registration/password_reset_done.html'), name="password_reset_done"),
+    path('reset/password_reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registro/registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/password_reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='registro/registration/password_reset_complete.html'), name='password_reset_complete'),
 
     # Crear usuarios / Gestionar usuarios
     path('usuarios/perfil_de_usuario/<int:id>/', perfil_de_usuario_view, name='perfil_de_usuario'),

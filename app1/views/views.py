@@ -28,7 +28,9 @@ def iniciar_sesion(request):
         messages.error(request, 'La matrícula o la contraseña son incorrectas.')
         return render(request, 'registro/login.html', data) 
     
-    return render(request, 'registro/login.html') 
+    return render(request, 'registro/login.html', {
+        'title': 'Iniciar Sesión',
+    }) 
 
 @login_required
 def cerrar_sesion(request):
@@ -37,7 +39,10 @@ def cerrar_sesion(request):
 
 @login_required
 def principal_miticket_view(request):
-    return render(request, 'principal_miticket.html')
+    data = {
+        'title': 'Principal mi ticket'
+    }
+    return render(request, 'principal_miticket.html', data)
 
 
 
