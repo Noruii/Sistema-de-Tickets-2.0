@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-
+from django.conf import settings
+from django.core.mail import send_mail
 from app1.models import *
 
 # Create your views here.
@@ -41,8 +42,8 @@ def perfil_de_usuario_view(request, id):
     if 'editar_perfil' in request.POST:
         # procesar el formulario del modal de editar perfil
         # recibir los datos
-        print(request.POST)
-        print(request.FILES)
+        print(f'POST: {request.POST}')
+        print(f'FILES: {request.FILES}')
         nombre = request.POST.get('first_name')
         apellido = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -77,11 +78,20 @@ def perfil_de_usuario_view(request, id):
             messages.error(request, 'Ingrese un correo electrónico válido.')
             return redirect('perfil_de_usuario', id=id)
 
-        # actualizar los datos
+        # Actualizar los datos
         usuario.first_name = nombre
         usuario.last_name = apellido
         usuario.email = email
         usuario.save()
+
+        # Actualizar datos en el tickets
+        tickets_usuario_especifico = Ticket.objects.filter(usuario_id = usuario)
+        for ticket in tickets_usuario_especifico:
+            ticket.usuario.first_name = nombre
+            ticket.usuario.last_name = apellido
+            ticket.email = email
+            ticket.save()
+
         messages.success(request, f'¡Perfil actualizado exitosamente!')
         return redirect('perfil_de_usuario', id=id)
     elif 'cambiar_contrasena' in request.POST:
@@ -113,6 +123,14 @@ def perfil_de_usuario_view(request, id):
             user = authenticate(username=usuario.username, password=password2)
             if user is not None:
                 login(request, user)
+
+            # Mandar un correo
+            subject = 'Cambio de contraseña'
+            message = 'Se a realizado un cambio de contraseña en su cuenta del sistema de tickets.'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [usuario.email]
+            send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+
             messages.success(request, f'¡Contraseña cambiada exitosamente!')
             return redirect('perfil_de_usuario', id=id)
         else:
