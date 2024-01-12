@@ -41,7 +41,6 @@ def perfil_de_usuario_view(request, id):
     }
     if 'editar_perfil' in request.POST:
         # procesar el formulario del modal de editar perfil
-        # recibir los datos
         print(f'POST: {request.POST}')
         print(f'FILES: {request.FILES}')
         nombre = request.POST.get('first_name')
@@ -70,12 +69,18 @@ def perfil_de_usuario_view(request, id):
             messages.error(request, 'Debe completar todos los campos obligatorios.')
             return redirect('perfil_de_usuario', id=id)
         
-        # validar correo
-        # validate_email solo verifica si el correo es valido no verifica si a ese correo es 'real' o enviable
+        # validar correo        
         try:
+            # validate_email solo verifica si el correo es valido no verifica si a ese correo es 'real' o enviable
             validate_email(email)
         except ValidationError:
             messages.error(request, 'Ingrese un correo electrónico válido.')
+            return redirect('perfil_de_usuario', id=id)
+        
+        # Validar que el email sea unico y no se repita para otro usuario
+        existing_user_with_email = User.objects.exclude(id=usuario.id).filter(email__iexact=email)
+        if existing_user_with_email.exists():
+            messages.error(request, 'El correo electrónico ya está registrado para otro usuario.')
             return redirect('perfil_de_usuario', id=id)
 
         # Actualizar los datos
@@ -102,18 +107,21 @@ def perfil_de_usuario_view(request, id):
             return render(request, 'usuarios/perfil_de_usuario.html', data)
         
         # Validar que la contraseña cumple los requisitos
-        try:
-            validar_requisitos_contrasena(password2)
-        except ValidationError as error:
-            error_message = getattr(error, 'message', None)
-            messages.error(request, error_message)
-            return render(request, 'usuarios/perfil_de_usuario.html', data)
+        # try:
+        #     validar_requisitos_contrasena(password2)
+        # except ValidationError as error:
+        #     error_message = getattr(error, 'message', None)
+        #     messages.error(request, error_message)
+        #     return render(request, 'usuarios/perfil_de_usuario.html', data)
         
         # validar que la contraseña actual sea correcta
         if request.user.check_password(password1):
             # validar contraseñas nuevas
             if password2 != password3:
                 messages.error(request, 'Las contraseñas nuevas no coinciden.')
+                return render(request, 'usuarios/perfil_de_usuario.html', data)
+            if password2 and password3 == password1:
+                messages.info(request, 'Se introdujo la misma contraseña. No se realizaron cambios.')
                 return render(request, 'usuarios/perfil_de_usuario.html', data)
             
             # actualizar contraseña del usuario
@@ -192,6 +200,12 @@ def crear_usuario_view(request):
                 messages.error(request, 'Ingrese un correo electrónico válido.')
                 return render(request, 'usuarios/crear_usuario.html', data)
             
+            # Validar que el email sea unico y no se repita para otro usuario
+            existing_user_with_email = User.objects.filter(email__iexact=email)
+            if existing_user_with_email.exists():
+                messages.error(request, 'El correo electrónico ya está registrado para otro usuario.')
+                return render(request, 'usuarios/crear_usuario.html', data)
+            
             # Validar que la contraseña cumple los requisitos
             try:
                 validar_requisitos_contrasena(password1)
@@ -267,6 +281,12 @@ def editar_usuario_view(request, id):
                 validate_email(email)
             except ValidationError:
                 messages.error(request, 'Ingrese un correo electrónico válido.')
+                return redirect('editar_usuario', id=id)
+            
+            # Validar que el email sea unico y no se repita para otro usuario
+            existing_user_with_email = User.objects.exclude(id=id).filter(email__iexact=email)
+            if existing_user_with_email.exists():
+                messages.error(request, 'El correo electrónico ya está registrado para otro usuario.')
                 return redirect('editar_usuario', id=id)
 
             if request.user.check_password(request.POST['passwordModal']):

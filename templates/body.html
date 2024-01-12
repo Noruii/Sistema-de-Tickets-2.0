@@ -42,7 +42,15 @@
                     <script>
                         Swal.fire({
                             "icon":"success",
-                            "title":"¡Acción exitosa!",
+                            //"title":"¡Acción exitosa!",
+                            "text":"{{ message }}",                        
+                        })
+                    </script>
+                {% elif message.tags == 'info' %}
+                    <script>
+                        Swal.fire({
+                            "icon":"info",
+                            //"title":"¡Ops!",
                             "text":"{{ message }}",                        
                         })
                     </script>
