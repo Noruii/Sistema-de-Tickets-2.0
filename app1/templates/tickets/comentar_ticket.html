@@ -101,7 +101,11 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <button type="button" onclick="cambiar_estado_prioridad({{ ticket.id }})" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
+                                {% if comentarios %}
+                                    <button type="button" onclick="cambiar_estado_prioridad({{ ticket.id }})" class="btn btn-info"><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
+                                {% else %}
+                                    <button type="button" onclick="cambiar_estado_prioridad({{ ticket.id }})" class="btn btn-info" disabled><i class="fa-solid fa-pen-to-square"></i> Cambiar Estado y Prioridad</button>
+                                {% endif %}                                
                             </form>
                         {% endif %}
                     </div>

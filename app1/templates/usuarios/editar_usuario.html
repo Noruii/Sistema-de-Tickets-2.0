@@ -17,7 +17,7 @@
                     {% csrf_token %}
                     <label for="matricula">Matrícula</label>
                     <div class="input-group mb-3">                            
-                        <input type="text" name="matricula" id="matricula" class="form-control" value="{{ usuario.matricula }}" placeholder="" disabled>
+                        <input type="text" name="matricula" id="matricula" class="form-control" value="{{ usuario.matricula }}" placeholder="" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fa-solid fa-id-badge"></span>

@@ -29,7 +29,8 @@ $(function () {
                 targets: [1, 2, 3, 5, 6]
             }
         ],
-    
+        pageLength : 8,
+        lengthMenu: [[8, 10, 20, -1], [8, 10, 20, 'Todos']],
         // autowidth: false,
         "language": {
             url : "//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"

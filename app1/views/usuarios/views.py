@@ -107,12 +107,12 @@ def perfil_de_usuario_view(request, id):
             return render(request, 'usuarios/perfil_de_usuario.html', data)
         
         # Validar que la contraseña cumple los requisitos
-        # try:
-        #     validar_requisitos_contrasena(password2)
-        # except ValidationError as error:
-        #     error_message = getattr(error, 'message', None)
-        #     messages.error(request, error_message)
-        #     return render(request, 'usuarios/perfil_de_usuario.html', data)
+        try:
+            validar_requisitos_contrasena(password2)
+        except ValidationError as error:
+            error_message = getattr(error, 'message', None)
+            messages.error(request, error_message)
+            return render(request, 'usuarios/perfil_de_usuario.html', data)
         
         # validar que la contraseña actual sea correcta
         if request.user.check_password(password1):
@@ -134,7 +134,7 @@ def perfil_de_usuario_view(request, id):
 
             # Mandar un correo
             subject = 'Cambio de contraseña'
-            message = 'Se a realizado un cambio de contraseña en su cuenta del sistema de tickets.'
+            message = f'Se a realizado un cambio de contraseña en su cuenta del sistema de tickets. \n http://127.0.0.1:8000/sdt/iniciar_sesion/'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [usuario.email]
             send_mail(subject, message, email_from, recipient_list, fail_silently=False)
@@ -237,6 +237,13 @@ def crear_usuario_view(request):
                         # Se pasa el diccionario al método create_user() utilizando la sintaxis de desempaquetado **
                         user = User.objects.create_user(**user_args)
                         user.save()
+
+                        # Mandar un correo
+                        subject = 'Usuario creado con exito!'
+                        message = f'Su usuario fue creado exitosamente en el sistema de tickets \n Usuario: {matricula} \n Contraseña: {password1} . \n http://127.0.0.1:8000/sdt/iniciar_sesion/'
+                        email_from = settings.EMAIL_HOST_USER
+                        recipient_list = [email]
+                        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
                         
                         messages.success(request, f'Usuario ``{user.matricula}: {user.first_name} {user.last_name}`` creado exitosamente')
                         return redirect('gestion_de_usuarios')
@@ -265,13 +272,16 @@ def editar_usuario_view(request, id):
 
         if request.method == 'POST':
             # Obtener los datos del formulario
+            matricula = request.POST['matricula']
             nombre = request.POST['first_name']
             apellido = request.POST['last_name']
             email = request.POST['email']
             rol_de_usuario = request.POST.get('flexRadioRol')
 
+            print('matricula: ', matricula)
+
             # Validar campos obligatorios estan llenos
-            if not nombre or not apellido or not email:
+            if not matricula or not nombre or not apellido or not email:
                 messages.error(request, 'Debe completar todos los campos obligatorios.')
                 return redirect('editar_usuario', id=id)
             
@@ -301,6 +311,7 @@ def editar_usuario_view(request, id):
                         staff = True
                         superuser = True
 
+                    usuario.matricula = matricula
                     usuario.first_name = nombre
                     usuario.last_name = apellido
                     usuario.email = email
@@ -328,7 +339,7 @@ def editar_usuario_view(request, id):
 @login_required
 def eliminar_usuario(request, id):
     usuario = get_object_or_404(User, id=id)
-    # usuario.delete()
+    usuario.delete()
     messages.success(request, f'¡Usuario ``{usuario.matricula}: {usuario.first_name} {usuario.last_name}`` eliminado exitosamente!')
     return redirect('gestion_de_usuarios')
 

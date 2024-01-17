@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib import messages
-
+from django.conf import settings
+from django.core.mail import send_mail
 from app1.models import *
 
 @login_required
@@ -133,7 +134,7 @@ def editar_ticket_view(request, id):
 def eliminar_ticket(request, id):
     ticket = get_object_or_404(Ticket, id=id)
     print(ticket)
-    # ticket.delete()
+    ticket.delete()
     messages.success(request, f'¡Ticket #{ticket.id} eliminado exitosamente!')
     return redirect('consultar_ticket')
 
@@ -170,6 +171,7 @@ def comentar_ticket_view(request, id):
             try:
                 comentario_texto = request.POST['textAreacomentario']
                 usuario = request.user
+                
                 comentario = Comentario.objects.create(
                     comentario=comentario_texto,
                     usuario=usuario,
@@ -183,6 +185,14 @@ def comentar_ticket_view(request, id):
                     estado_actual = estados[1][0]
                     estado_actual_update.estado = estado_actual
                     estado_actual_update.save()
+
+                # Mandar un correo
+                if ticket.usuario.email != usuario.email:
+                    subject = f'Su Ticket #{ticket.id} ha sido comentado!'
+                    message = f'Se ha comentado su ticket \n"Asunto: {ticket.asunto}" por favor ir a revisar. \nRespuesta: "{comentario_texto}" \n http://127.0.0.1:8000/sdt/iniciar_sesion/'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [ticket.usuario.email]
+                    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
 
                 messages.success(request, '¡Comentario agregado correctamente!')
                 return redirect('comentar_ticket', id=id)

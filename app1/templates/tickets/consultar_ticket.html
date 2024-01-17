@@ -36,7 +36,8 @@ TODO:
     {% if user.is_superuser or user.is_staff %}
         {% for t in tickets %}
             <tr>
-                <th>{{ forloop.counter }}</th>
+                <!-- <th>{{ forloop.counter }}</th> -->
+                <td>{{ t.id }}</td>
                 <td>{{ t.usuario.matricula }}</td>
                 <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
                 <td>{{ t.email}}</td>
@@ -73,7 +74,8 @@ TODO:
     {% else %}
         {% for t in tickets_usuario_especifico %}
             <tr>
-                <th>{{ forloop.counter }}</th>
+                <!-- <th>{{ forloop.counter }}</th> -->
+                <td>{{ t.id }}</td>
                 <td>{{ t.usuario.matricula }}</td>
                 <td>{{ t.usuario.first_name }} {{ t.usuario.last_name }}</th>
                 <td>{{ t.email}}</td>
