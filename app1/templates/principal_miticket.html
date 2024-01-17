@@ -87,9 +87,16 @@
             const ya_mostrado = localStorage.getItem('mensajeMostrado');
             if (!ya_mostrado) {
                 let usuario = '{{ request.user.matricula }}'
-                console.log(usuario)        
+                // En Django, el valor de True o False en Python no se traduce directamente a JavaScript.
+                // El filtro yesno de Django para convertir True y False a las cadenas 'true' y 'false'. 
+                // Luego, en JavaScript, comparo esas cadenas con 'true' y 'false' para obtener valores booleanos (true o false).
+                let super_user = '{{ request.user.is_superuser|yesno:"true,false" }}' === 'true';
+                let staff = '{{ request.user.is_staff|yesno:"true,false" }}' === 'true';
+        
                 let mensaje = '';
-                if (usuario.toLowerCase().startsWith('p')) {
+                if (super_user || staff) {
+                    mensaje = '¡Bienvenido, Administrador!';
+                } else if (usuario.toLowerCase().startsWith('p')) {
                     mensaje = '¡Bienvenido, maestro!';
                 } else {
                     mensaje = '¡Bienvenido, estudiante!';
